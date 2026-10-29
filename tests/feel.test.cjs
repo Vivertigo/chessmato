@@ -1,0 +1,33 @@
+// Drag-to-move, sounds and haptics settings.
+const {chromium}=require('playwright');
+const BASE=process.env.CHESSMATO_URL||'http://127.0.0.1:8767/';
+let failures=0,passes=0;function ok(c,m){if(c){passes++;console.log('  ok  '+m)}else{failures++;console.log('  FAIL '+m)}}
+(async()=>{const browser=await chromium.launch();const page=await (await browser.newContext({viewport:{width:1300,height:950}})).newPage();const errors=[];page.addInitScript(()=>{try{if(!sessionStorage.getItem('thinking-test'))localStorage.setItem('chessmato-thinking-v1','off')}catch(e){}});page.on('pageerror',e=>errors.push(e.message));
+await page.goto(BASE);await page.waitForFunction(()=>window.chessMatoFeel);
+const center=async s=>{let b=await page.locator(`#board [data-s="${s}"]`).boundingBox();return [b.x+b.width/2,b.y+b.height/2]};
+const dragMove=async(a,b)=>{await page.evaluate(()=>$('board').scrollIntoView({block:'center'}));let [x1,y1]=await center(a),[x2,y2]=await center(b);await page.mouse.move(x1,y1);await page.mouse.down();await page.mouse.move((x1+x2)/2,(y1+y2)/2,{steps:4});
+  let ghost=await page.evaluate(()=>!!document.querySelector('.drag-ghost'));await page.mouse.move(x2,y2,{steps:4});await page.mouse.up();return ghost};
+await page.evaluate(()=>{chessUITest.navigate('positions','manual');$('mode').value='free';$('mode').dispatchEvent(new Event('change'))});
+let ghost=await dragMove('e2','e4');ok(ghost,'dragging shows the piece under the pointer');
+ok(await page.evaluate(()=>game.history().join(' ')==='e4'&&!document.querySelector('.drag-ghost')),'dropping on a legal square plays the move (e4)');
+await dragMove('e7','e3');ok(await page.evaluate(()=>game.history().length===1&&!selected),'dropping on an illegal square plays nothing');
+let [x,y]=await center('d7');await page.mouse.move(x,y);await page.mouse.down();await page.mouse.move(x+30,y+30,{steps:3});await page.mouse.move(x,y,{steps:3});await page.mouse.up();
+ok(await page.evaluate(()=>game.history().length===1),'dropping back on the start square plays nothing');
+await page.click('#board [data-s="d7"]');await page.click('#board [data-s="d5"]');ok(await page.evaluate(()=>game.history().join(' ')==='e4 d5'),'click-to-move still works');
+await dragMove('e4','d5');ok(await page.evaluate(()=>game.history().join(' ')==='e4 d5 exd5'&&chessMatoFeel.last()==='capture'),'drag capture works; the capture sound is chosen');
+console.log('Puzzle and thinking board');
+await page.evaluate(()=>load(data.drills.find(d=>d.id==='backrank')));await dragMove('e1','e8');await page.waitForTimeout(300);
+ok(await page.evaluate(()=>document.querySelector('.feedback-modal').open&&/won/i.test($('resulttitle').textContent)),'a puzzle can be solved by dragging');await page.click('#resultokay');
+await page.evaluate(()=>{chessMatoThinking.exit();sessionStorage.setItem('thinking-test','1');localStorage.setItem('chessmato-thinking-v1','on')});await page.reload();await page.waitForFunction(()=>window.chessMatoFeel);
+await page.evaluate(()=>{chessUITest.navigate('positions','manual');$('mode').value='free';$('mode').dispatchEvent(new Event('change'))});
+await dragMove('g1','f3');ok(await page.evaluate(()=>chessMatoThinking.get()&&chessMatoThinking.get().line[0]==='Nf3'&&game.history().length===0),'with the thinking board on, a drag starts a private line (nothing played)');
+await page.evaluate(()=>{chessMatoThinking.exit();sessionStorage.removeItem('thinking-test');localStorage.setItem('chessmato-thinking-v1','off')});
+console.log('Settings');
+await page.evaluate(()=>chessUITest.navigate('settings','accessibility'));
+ok(await page.evaluate(()=>['feel-drag','feel-sound','feel-haptics'].every(id=>$(id)&&$(id).checked)),'Accessibility has drag, sound and vibration switches, on by default');
+await page.uncheck('#feel-drag');await page.uncheck('#feel-sound');await page.reload();await page.waitForFunction(()=>window.chessMatoFeel);
+ok(await page.evaluate(()=>!chessMatoFeel.get().drag&&!chessMatoFeel.get().sound&&chessMatoFeel.get().haptics&&!$('board').classList.contains('drag-enabled')),'switches persist');
+await page.evaluate(()=>{chessUITest.navigate('positions','manual');$('mode').value='free';$('mode').dispatchEvent(new Event('change'))});
+ghost=await dragMove('e2','e4');ok(!ghost&&await page.evaluate(()=>game.history().length===0),'with drag off, dragging does nothing (clicks only)');
+ok(errors.length===0,'no JS errors '+JSON.stringify(errors));
+await browser.close();console.log(`\n${passes} passed, ${failures} failed`);process.exit(failures?1:0)})().catch(e=>{console.error(e);process.exit(2)});

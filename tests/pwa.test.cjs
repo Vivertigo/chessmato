@@ -16,7 +16,7 @@ await page.evaluate(()=>chessUITest.navigate('settings','about'));ok(await page.
 await page.waitForFunction(()=>navigator.serviceWorker&&navigator.serviceWorker.controller,null,{timeout:30000}).catch(()=>{});
 if(!await page.evaluate(()=>!!navigator.serviceWorker.controller)){await page.reload();await page.waitForFunction(()=>navigator.serviceWorker.controller,null,{timeout:30000})}
 ok(await page.evaluate(()=>!!navigator.serviceWorker.controller),'offline service worker is active');
-await page.waitForFunction(async()=>{let c=await caches.open('checkmato-app-v1');return !!(await c.match('stockfish.wasm'))&&!!(await c.match('pieces/merida/bQ.svg'))},null,{timeout:30000});
+await page.waitForFunction(async()=>{let c=await caches.open('checkmato-app-v2');return !!(await c.match('stockfish.wasm'))&&!!(await c.match('pieces/merida/bQ.svg'))},null,{timeout:30000});
 console.log('Offline');
 await ctx.setOffline(true);await page.reload();await page.waitForFunction(()=>window.chessMatoGuess&&window.chessMatoGames);
 ok(await page.evaluate(()=>document.querySelectorAll('#board [data-s]').length===64&&!!document.querySelector('#board img, #board .piece')),'with the network off, the app loads from the cache with its board');
