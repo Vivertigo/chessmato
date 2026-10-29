@@ -188,5 +188,28 @@
   "rating": 550,
   "eval": "mate 1",
   "ply": 30
+ },
+ {
+  "fen": "6k1/5r1p/pr1N4/1P3pP1/2Q5/P3p1P1/3q3P/2R3K1 w - - 5 38",
+  "line": [
+   "Qxf7+",
+   "Kh8",
+   "Rc8#"
+  ],
+  "themes": [
+   "mate",
+   "mate in 2",
+   "back rank",
+   "capture",
+   "check",
+   "queen",
+   "tactics"
+  ],
+  "why": [
+   "The line forces checkmate in 2. The king is trapped on its back rank."
+  ],
+  "rating": 850,
+  "eval": "mate 2",
+  "ply": 74
  }
 ]
