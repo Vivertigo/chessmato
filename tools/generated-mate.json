@@ -46,5 +46,34 @@
   "rating": 1250,
   "eval": "mate 2",
   "ply": 80
+ },
+ {
+  "fen": "r1b4k/8/p1Rp1pP1/7P/p2P1br1/5N2/1PP1R2P/1K6 w - - 2 33",
+  "line": [
+   "Re8+",
+   "Kg7",
+   "Rc7+",
+   "Bd7",
+   "Rxd7+",
+   "Kh6",
+   "Rh7#"
+  ],
+  "themes": [
+   "mate",
+   "mate in 4",
+   "check",
+   "fork",
+   "pin",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "The line forces checkmate in 4.",
+   "After Re8+ the rook attacks the king on h8 and the bishop on c8 at once.",
+   "Re8+ pins the bishop on c8 to the rook on a8."
+  ],
+  "rating": 1850,
+  "eval": "mate 4",
+  "ply": 64
  }
 ]
