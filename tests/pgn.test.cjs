@@ -83,6 +83,12 @@ let bot=await page.evaluate(()=>chessMatoGames.get().games.slice(-1)[0]);
 ok(await page.evaluate(n=>chessMatoGames.get().games.length===n+1,n0)&&bot.source==='bot'&&bot.result==='1-0'&&bot.outcome==='win'&&bot.how==='checkmate'&&bot.start==='k7/8/1K6/8/8/8/8/7R w - - 0 1','finished bot game saved as a game with its start position');
 let pg=await page.evaluate(()=>chessMatoGames.toPGN(chessMatoGames.get().games.slice(-1)[0]));ok(/\[FEN "k7\/8\/1K6/.test(pg)&&/1\. Rh8# 1-0/.test(pg),'bot game exports as PGN');
 await page.click('#resultokay').catch(()=>{});
+console.log('Opening name under the board');
+await page.evaluate(()=>{chessUITest.navigate('positions','manual');$('fen').value='rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';$('loadfen').click();$('mode').value='free';$('mode').dispatchEvent(new Event('change'))});
+for(const [a,b] of [['e2','e4'],['e7','e5'],['g1','f3'],['b8','c6'],['f1','c4']]){await page.click(`#board [data-s="${a}"]`);await page.click(`#board [data-s="${b}"]`)}
+let on=await page.evaluate(()=>({h:$('opening-name').hidden,t:$('opening-name').textContent,hist:game.history().join(' ')}));
+ok(!on.h&&/^Opening: C50 Italian Game/.test(on.t),'Analysis board names the opening as you play: '+on.t+' ['+on.hist+']');
+await page.evaluate(()=>load(data.drills.find(d=>d.id==='backrank')));ok(await page.evaluate(()=>$('opening-name').hidden),'no opening name on puzzles');
 console.log('Persistence and full backup');
 await page.reload();await page.waitForFunction(()=>window.chessMatoGames);
 ok(await page.evaluate(n=>chessMatoGames.get().games.length===n+1&&chessMatoGames.get().names[0]==='TestPlayer',n0),'games and usernames survive a reload');

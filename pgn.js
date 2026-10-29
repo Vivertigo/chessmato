@@ -100,6 +100,12 @@ let bk=$('panel-settings-backups');if(bk){let s=document.createElement('section'
   $('all-export').onclick=()=>{let keys={};for(let k of ALL){let v=localStorage.getItem(k);if(v!==null)keys[k]=v}download('chessmato-backup-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({app:'ChessMato',format:1,date:new Date().toISOString(),keys},null,1),'application/json')};
   $('all-restore').onclick=()=>$('all-file').click();$('all-file').onchange=async()=>{try{let d=JSON.parse(await $('all-file').files[0].text());if(!d||d.app!=='ChessMato'||d.format!==1||!d.keys||typeof d.keys!=='object')throw Error('This is not a ChessMato full backup.');let ks=Object.keys(d.keys).filter(k=>ALL.includes(k));if(!ks.length)throw Error('The backup contains no ChessMato data.');for(let k of ks){if(typeof d.keys[k]!=='string')throw Error('Damaged entry: '+k);if(k!=='chessmato-gary-folded'&&k!=='chessmato-thinking-v1')JSON.parse(d.keys[k])}
     if(!confirm('Replace the ChessMato data in this browser with the backup from '+String(d.date).slice(0,10)+'?'))return;for(let k of ks)localStorage.setItem(k,d.keys[k]);location.reload()}catch(e){$('all-msg').textContent='Could not restore: '+e.message}$('all-file').value=''}}
+// ---- Opening name under the board for games and analysis that start from the initial position ----
+const tag=document.createElement('p');tag.id='opening-name';tag.className='muted';tag.hidden=true;const desc=$('description');if(desc)desc.after(tag);
+const startFen=new Chess().fen();
+function showOpening(){let h=game.history(),hit=null;if(h.length&&$('mode').value!=='drill'){let c=new Chess();if(h.every(s=>c.move(s))&&c.fen()===game.fen())hit=openingName(h)}
+  tag.hidden=!hit;if(hit)tag.textContent='Opening: '+hit.eco+' '+hit.name+(hit.plies<h.length?' (book ended at move '+Math.ceil(hit.plies/2)+')':'')}
+const priorRenderOp=render;render=function(...a){let r=priorRenderOp(...a);try{showOpening()}catch(e){}return r};showOpening();
 const style=document.createElement('style');style.textContent='.game-row{border-bottom:1px solid var(--stroke);padding:10px 0}.game-row p{margin:4px 0}.game-row .row{margin:6px 0}#games-summary p{margin:4px 0}#games-pgn{min-height:90px;font:12px ui-monospace,monospace}';document.head.append(style);
-window.chessMatoGames={importText,toPGN,analyse,openingName,get:()=>G,aggregate,parseOne,splitGames};
+window.chessMatoGames={showOpening,importText,toPGN,analyse,openingName,get:()=>G,aggregate,parseOne,splitGames};
 })();
