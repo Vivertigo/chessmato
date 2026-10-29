@@ -21,3 +21,10 @@ fieldset{border:1px solid #405047;border-radius:6px;padding:17px;margin:18px 0}l
 #view-heading h1,#view-heading p,#view-group,.board-context #title,.board-context #description,#status,.move-list summary,footer,#section-tabs button:not([aria-selected=true]){color:#fff5dc!important;text-shadow:-1px -1px 0 #3b2a22,1px -1px 0 #3b2a22,-1px 1px 0 #3b2a22,1px 1px 0 #3b2a22}
 @media(max-width:900px){.mentor-card{display:flex!important;min-width:125px;max-width:145px;align-items:center;padding:0 5px;border:0;margin:0}.mentor-card>:not(#gary-minimize){display:none!important}#gary-minimize{white-space:nowrap;font-size:10px}}
 @media(max-width:680px){.sq .letter-piece{font-size:calc(9vw * var(--piece-scale))}:root[data-notation=center] .coord{font-size:calc(5vw * var(--label-scale))!important}:root[data-notation=center] .sq:has(.piece) .coord{font-size:calc(3.8vw * var(--label-scale))!important}}
+/* Hover must not repaint the board: the base button:hover background hid square colors and broke label contrast. */
+#board .sq.light:hover{background:var(--board-light)}#board .sq.dark:hover{background:var(--board-dark)}
+/* Large centered labels: keep piece and label both readable on occupied or marked squares. */
+:root[data-notation=center] .sq:has(.piece) .coord,:root[data-notation=center] .sq.marked .coord{top:auto;bottom:1px;transform:none;z-index:3;font-size:calc(clamp(10px,1.25vw,16px) * var(--label-scale))!important}
+:root[data-notation=center][data-labels=on] .sq .piece.svg-piece{top:3%;width:calc(100% * min(var(--piece-scale),.76));height:calc(100% * min(var(--piece-scale),.76))}
+:root[data-notation=center][data-labels=on] .sq .piece:not(.svg-piece){transform:translateY(-12%)}
+@media(max-width:680px){:root[data-notation=center] .sq:has(.piece) .coord,:root[data-notation=center] .sq.marked .coord{font-size:calc(3.1vw * var(--label-scale))!important}}
