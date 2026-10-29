@@ -6,7 +6,7 @@ let failures=0,passes=0;function ok(c,m){if(c){passes++;console.log('  ok  '+m)}
 const PGN=`[Event "Rated Blitz game"]
 [Site "https://lichess.org/abc"]
 [Date "2026.10.01"]
-[White "Vivertigo"]
+[White "TestPlayer"]
 [Black "Opponent1"]
 [Result "1-0"]
 [Termination "Normal"]
@@ -16,7 +16,7 @@ const PGN=`[Event "Rated Blitz game"]
 [Event "Casual"]
 [Date "2026.10.02"]
 [White "Someone"]
-[Black "vivertigo"]
+[Black "testplayer"]
 [Result "1-0"]
 [Termination "Normal"]
 
@@ -30,7 +30,7 @@ const PGN=`[Event "Rated Blitz game"]
 `;
 const MISSED=`[Event "Missed mate"]
 [Date "2026.10.03"]
-[White "Vivertigo"]
+[White "TestPlayer"]
 [Black "Opp"]
 [Result "*"]
 
@@ -41,7 +41,7 @@ await page.goto(BASE);await page.waitForFunction(()=>window.chessMatoGames);
 console.log('Import');
 await page.evaluate(()=>chessUITest.navigate('profile','games'));
 ok(await page.evaluate(()=>!$('panel-profile-games').hidden&&!!$('games-import')),'Player profile has a My games section');
-await page.fill('#games-names','Vivertigo');await page.fill('#games-pgn',PGN);await page.click('#games-import');
+await page.fill('#games-names','TestPlayer');await page.fill('#games-pgn',PGN);await page.click('#games-import');
 let msg=await page.textContent('#games-msg');ok(/^2 games imported/.test(msg)&&/Skipped 1: Game 3: Illegal or unreadable move "Ke3"/.test(msg),'two games imported, broken game reported with the bad move: '+msg);
 let G=await page.evaluate(()=>chessMatoGames.get().games);
 ok(G.length===2&&G[0].sans.length===16&&G[0].sans[3]==='Nc6'&&G[0].sans[4]==='Bc4','comments, clocks, variations and NAGs ignored; main line kept');
@@ -50,14 +50,14 @@ ok(G[0].opening&&/Italian Game/.test(G[0].opening.name)&&/^C5/.test(G[0].opening
 ok(G[0].outcome==='win'&&G[1].outcome==='loss'&&/resign/.test(G[1].how),'results and inferred resignation detected');
 ok(!G[0].departure||(G[0].departure.by==='end'&&G[0].departure.ply===13),'game that follows the Italian repertoire to its end is not counted as your departure');
 await page.fill('#games-pgn',PGN);await page.click('#games-import');ok(/^0 games imported, 2 already saved/.test(await page.textContent('#games-msg')),'re-importing the same games adds no duplicates');
-let dep=await page.evaluate(()=>chessMatoGames.importText('[White "Vivertigo"]\n[Black "X"]\n[Result "0-1"]\n\n1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 0-1','auto'));
+let dep=await page.evaluate(()=>chessMatoGames.importText('[White "TestPlayer"]\n[Black "X"]\n[Result "0-1"]\n\n1. e4 e5 2. Nf3 Nc6 3. Bb5 a6 0-1','auto'));
 let g3=await page.evaluate(()=>chessMatoGames.get().games[2]);
 ok(dep.added===1&&g3.departure&&g3.departure.by==='you'&&/move 3 with Bb5/.test(g3.departure.text)&&/Bc4/.test(g3.departure.text),'repertoire departure found: '+(g3.departure&&g3.departure.text));
 ok(await page.evaluate(()=>document.querySelectorAll('#games-list .game-row').length===3&&/^3 saved games/.test($('games-summary').textContent)),'games listed with a summary');
 console.log('Export');
 let [dl]=await Promise.all([page.waitForEvent('download'),page.click('#games-export')]);let text=fs.readFileSync(await dl.path(),'utf8');
 let round=await page.evaluate(t=>{let gs=chessMatoGames.splitGames(t).map(chessMatoGames.parseOne);return gs.map(g=>g.sans.join(' '))},text);
-ok(round.length===3&&round[0]===G[0].sans.join(' ')&&round[1]===G[1].sans.join(' ')&&/\[White "Vivertigo"\]/.test(text)&&/1\. e4 e5 2\. Nf3/.test(text),'exported PGN re-imports to identical games');
+ok(round.length===3&&round[0]===G[0].sans.join(' ')&&round[1]===G[1].sans.join(' ')&&/\[White "TestPlayer"\]/.test(text)&&/1\. e4 e5 2\. Nf3/.test(text),'exported PGN re-imports to identical games');
 let fenGame=await page.evaluate(()=>{let g={headers:{White:'a',Black:'b'},sans:['Kb7'],start:'k7/8/1K6/8/8/8/8/7R b - - 3 40',result:'*'};return chessMatoGames.toPGN(g)});
 ok(/\[SetUp "1"\]/.test(fenGame)&&/40\.\.\. Kb7/.test(fenGame),'games from a set-up position export with FEN and black move number');
 console.log('Engine review');
@@ -85,7 +85,7 @@ let pg=await page.evaluate(()=>chessMatoGames.toPGN(chessMatoGames.get().games.s
 await page.click('#resultokay').catch(()=>{});
 console.log('Persistence and full backup');
 await page.reload();await page.waitForFunction(()=>window.chessMatoGames);
-ok(await page.evaluate(n=>chessMatoGames.get().games.length===n+1&&chessMatoGames.get().names[0]==='Vivertigo',n0),'games and usernames survive a reload');
+ok(await page.evaluate(n=>chessMatoGames.get().games.length===n+1&&chessMatoGames.get().names[0]==='TestPlayer',n0),'games and usernames survive a reload');
 await page.evaluate(()=>chessUITest.navigate('settings','backups'));
 let [bk]=await Promise.all([page.waitForEvent('download'),page.click('#all-export')]);let bkPath=await bk.path(),backup=JSON.parse(fs.readFileSync(bkPath,'utf8'));
 ok(backup.app==='ChessMato'&&backup.keys['chessmato-games-v1']&&backup.keys['chess-workshop-v1']&&backup.keys['chessmato-training-v1'],'backup file holds games, puzzles and training');

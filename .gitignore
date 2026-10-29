@@ -1,5 +1,4 @@
-# Internal process notes and handoff files (kept locally, not published)
-CLAUDIA_HANDOFF.md
-PROMPT_FOR_CLAUDIA.txt
+# Local-only files (never published)
+personal-data.js
 *.zip
 node_modules/

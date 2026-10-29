@@ -1,6 +1,7 @@
 'use strict';
+const PERSONAL=window.CHESSMATO_PERSONAL||{};
 // Offline coach chats. Every answer is built locally from chess.js rules, saved progress and
-// (only when a bot game already has one) the bundled Stockfish suggestion. No network or AI service.
+// (only when a bot game already has one) the bundled Stockfish suggestion. No network needed.
 (function(){
 const KEY='chessmato-coach-chats-v1',VALUE={p:1,n:3,b:3,r:5,q:9,k:0};
 let logs={gary:[],claudia:[]};try{let d=JSON.parse(localStorage.getItem(KEY)||'{}');for(let k of ['gary','claudia'])if(Array.isArray(d[k]))logs[k]=d[k].filter(m=>m&&typeof m.text==='string'&&['you','coach'].includes(m.from)).slice(-120)}catch(e){}
@@ -51,11 +52,11 @@ function trainingSummary(){let p=profile(),st=coachStats(),done=st.sessions.filt
   return {rating:p.rating,sessions:done.length,recall:dec?Math.round(100*right/dec):null,kudos:avg,moves:p.kudos.length,clean:p.clean,mistakes:p.mistakes.slice(-3).map(m=>m.text)}}
 
 function nextFocus(){let t=trainingSummary(),items=[];
-  if(t.sessions<3)items.push('Openings first: run a few repertoire lines in Openings → Practice until the first moves feel automatic. Your reported opening accuracy (57.7%) is the clearest gap.');
+  if(t.sessions<3)items.push('Openings first: run a few repertoire lines in Openings → Practice until the first moves feel automatic.'+(PERSONAL.openingGap?' '+PERSONAL.openingGap:''));
   else if(t.recall!==null&&t.recall<80)items.push('Your opening recall is '+t.recall+'%. Repeat the recommended line with guides off.');
   items.push('Middlegame: before each move, scan their checks, captures and threats, and anything of yours that is undefended. Ask me "check this position" any time.');
   if(t.kudos!==null&&t.kudos<70)items.push('Your recent bot-game Kudos average is '+t.kudos.toFixed(0)+'%. Slow down on moves where something is attacked.');
-  items.push('Do not resign early. Play on in difficult positions; you are strong in endgames (77% reported).');
+  items.push('Do not resign early. Play on in difficult positions'+(PERSONAL.endgameNote?'; '+PERSONAL.endgameNote:', where endgame skill often saves half a point or more')+'.');
   return items}
 
 const intents=[
@@ -81,7 +82,7 @@ function factsFor(intent){
   case 'opening':{let st=coachStats(),last=st.sessions.slice(-1)[0];return ['Your repertoire: White plays an Italian-based 1.e4; Black plays the Caro-Kann against 1.e4 and the Slav against d4/c4.',t.sessions?'Completed opening sessions: '+t.sessions+(t.recall!==null?', first-choice recall '+t.recall+'%':'')+'.':'No opening sessions completed yet.',last?'Last session: '+last.name+'.':'Start with Openings → Practice → Recommended line.','Aim to understand why each move is played, not just memorize the order.']}
   case 'resign':{let g=game,m=material(g),me=mySide(g),d=m[me]-m[other(me)];return ['Current material: '+(d===0?'level':(d>0?'up ':'down ')+Math.abs(d))+'.','Many positions that feel lost still have defensive chances, especially in endgames, and endgames are your strongest phase.','In a bot game, the Resign button opens a review first: material, the engine estimate, and the choice to keep playing. Resigned positions are saved under Player profile → Resignation review, where you can play on from them.']}
   case 'progress':return ['Training rating: '+t.rating+' (editable, not official Elo).',t.kudos!==null?'Recent Kudos average over '+Math.min(40,t.moves)+' scored moves: '+t.kudos.toFixed(1)+'%.':'No bot moves scored yet.','Clean puzzle solves: '+t.clean+'.',t.mistakes.length?'Recent notebook entries: '+t.mistakes.join(' | '):'Mistake notebook is empty.']
-  case 'endgame':return ['Endgames are your reported strength (77%). Keep them sharp with occasional practice, but spend most of your time on openings and the middlegame.','Key habits: activate the king, push passed pawns with support, and check stalemate before you promote.']
+  case 'endgame':return [PERSONAL.endgameReply||'Endgames reward patience. Keep them sharp with occasional practice alongside openings and the middlegame.','Key habits: activate the king, push passed pawns with support, and check stalemate before you promote.']
   case 'hint':{if(window.academyCoach&&window.academyCoach.botHintFen&&window.academyCoach.botHintFen())return ['In a bot game, use Play → "Suggest a move". It uses the local engine and marks that move as assisted.'];if($('mode').value==='drill'&&!done)return ['Use the Hint button for a staged hint, or Guide squares to see the piece. I will not reveal a puzzle answer in chat. Start with your checks, captures and threats.'];return positionReport().facts}
   case 'feelings':return ['Strong feelings during chess are normal. They mean you care about the game.','A reset that helps: stand up, breathe, and before the next move name one thing your opponent wants.','Your training rating is editable and private. It measures practice, not you.'];
   case 'who':return null;
@@ -117,7 +118,7 @@ const style=document.createElement('style');style.textContent=`#claudia-chat-ope
 function build(id){let c=coaches[id],host=$('panel-coach-'+id);if(!host)return;host.replaceChildren();let wrap=document.createElement('div');wrap.className='coach-chat chat-'+id;
   wrap.innerHTML='<div class="coach-chat-head"><span class="mentor-monogram"></span><div><h2></h2><small class="muted"></small></div></div><p class="chat-note"></p><div class="coach-chat-log" role="log" aria-live="polite"></div><div class="chat-chips"></div><form><label class="sr-only"></label><input autocomplete="off"><button class="primary" type="submit">Send</button></form><button type="button" class="chat-clear">Clear this chat</button>';
   wrap.querySelector('.mentor-monogram').textContent=c.mono;wrap.querySelector('h2').textContent='Chat with '+c.name;wrap.querySelector('small').textContent=c.tagline;
-  wrap.querySelector('.chat-note').textContent='Works offline. Answers come from the board, your saved training, and the local engine. No internet or AI service is used.';
+  wrap.querySelector('.chat-note').textContent='Works offline. Answers come from the board, your saved training, and the local engine. No internet connection is needed.';
   let input=wrap.querySelector('input'),label=wrap.querySelector('label');input.id='chat-input-'+id;label.htmlFor=input.id;label.textContent='Message '+c.name;input.placeholder='Ask '+c.short+'…';
   for(let q of ['Check this position','What should I work on?','My openings','Should I resign?','My progress']){let b=document.createElement('button');b.type='button';b.textContent=q;b.onclick=()=>send(id,q);wrap.querySelector('.chat-chips').append(b)}
   wrap.querySelector('form').onsubmit=e=>{e.preventDefault();let v=input.value.trim();if(!v)return;input.value='';send(id,v)};
