@@ -18,7 +18,7 @@ fieldset{border:1px solid #405047;border-radius:6px;padding:17px;margin:18px 0}l
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 #gary-minimize{grid-column:1/-1;font-size:10px;padding:4px 7px;min-height:26px;text-align:left;background:#26382e}
 .mentor-folded>:not(#gary-minimize){display:none!important}.mentor-folded{display:block;padding:4px;margin-bottom:4px}.mentor-folded #gary-minimize{width:100%}
-#view-heading h1,#view-heading p,#view-group,.board-context #title,.board-context #description,#status,.move-list summary,footer,#section-tabs button:not([aria-selected=true]){color:#fff5dc!important;text-shadow:-1px -1px 0 #3b2a22,1px -1px 0 #3b2a22,-1px 1px 0 #3b2a22,1px 1px 0 #3b2a22}
+#view-heading h1,#view-heading p,#view-group,.board-context #title,.board-context #description,#opening-name,#status,.move-list summary,footer,#section-tabs button:not([aria-selected=true]){color:#fff5dc!important;text-shadow:-1px -1px 0 #3b2a22,1px -1px 0 #3b2a22,-1px 1px 0 #3b2a22,1px 1px 0 #3b2a22}
 @media(max-width:900px){.mentor-card{display:flex!important;min-width:125px;max-width:145px;align-items:center;padding:0 5px;border:0;margin:0}.mentor-card>:not(#gary-minimize){display:none!important}#gary-minimize{white-space:nowrap;font-size:10px}}
 @media(max-width:680px){.sq .letter-piece{font-size:calc(9vw * var(--piece-scale))}:root[data-notation=center] .coord{font-size:calc(5vw * var(--label-scale))!important}:root[data-notation=center] .sq:has(.piece) .coord{font-size:calc(3.8vw * var(--label-scale))!important}}
 /* Hover must not repaint the board: the base button:hover background hid square colors and broke label contrast. */

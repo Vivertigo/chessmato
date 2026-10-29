@@ -8,7 +8,7 @@ const STEPS=[
  {title:'Think before you move',body:'With the thinking board on, your first move tints the board blue. Play out a whole line for both sides, step back and forth, then press Play to send only your first move. Reset returns to the real game.'},
  {title:'Where to start',body:'Puzzles for tactics, Openings for your repertoire, Play for games against the bot or Guess the move, and Coaches for a three-task Daily plan from Gary Bendt or Claudia Herman.',go:['coach','plan'],goLabel:'Open the Daily plan'},
  {title:'Your data stays here',body:'Progress is saved in this browser. Use Settings → Backups → Back up everything to keep a copy or move to another device. Import your own games under Player profile → My games.'},
- {title:'Use it offline',body:'Started with the launcher in Chrome or Edge, CheckMato can be installed from Settings → About and then opens offline from your desktop or home screen.'}];
+ {title:'Use it offline',body:'In Chrome or Edge (desktop or Android), install CheckMato from Settings → About. It then opens offline from your desktop or home screen.'}];
 const d=document.createElement('dialog');d.id='tour';d.setAttribute('aria-labelledby','tour-title');
 d.innerHTML='<div class="tour-head"><img id="tour-logo" src="icons/icon-192.png" alt="" width="72" height="72"><p id="tour-step" class="muted"></p></div><h2 id="tour-title"></h2><p id="tour-body"></p><div class="row tour-buttons"><button id="tour-skip">Skip tour</button><span class="tour-spacer"></span><button id="tour-back">Back</button><button id="tour-go" hidden></button><button class="primary" id="tour-next">Next</button></div>';
 document.body.append(d);let i=0;

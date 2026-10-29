@@ -30,6 +30,15 @@ Puzzles award +12 clean, +4 with help, -3 per rejected attempt. Quiz completion 
 Puzzle bands are rough teaching estimates. The starter collection is beginner-level, around 400–850, and high target numbers do not transform simple exercises into advanced ones. Import harder exercises to expand the curriculum.
 Analysis mode has no automatic opponent and does not score moves.
 
+## Hosting as a website
+CheckMato is a plain static site with no build step. On Cloudflare Pages, connect the GitHub repo and use:
+- Framework preset: None
+- Build command: (leave empty)
+- Build output directory: `/`
+- Root directory: (leave empty)
+
+`_headers` sets the security and caching headers (the page and service worker always revalidate, so updates reach installed apps), and `404.html` stops missing files from being answered with the app page. Progress is saved in each visitor's own browser; nothing is sent to the server. The optional `personal-data.js` is never deployed, because it is gitignored.
+
 ## Persistence and backup
 Browser storage saves your progress when available. File pages and the localhost app use different browser storage. Export/import the drill backup AND the separate arena-progress backup when moving between them. Clearing browser storage deletes local progress.
 Drill backup restores the drill collection/history; arena backup restores the rating, badges, lesson completion, activities, and Kudos history.

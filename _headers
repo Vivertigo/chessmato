@@ -1,0 +1,17 @@
+# Cloudflare Pages response headers.
+/*
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+# The service worker and the page itself must always be revalidated so updates reach installed apps.
+/sw.js
+  Cache-Control: no-cache
+/index.html
+  Cache-Control: no-cache
+/manifest.webmanifest
+  Content-Type: application/manifest+json
+  Cache-Control: no-cache
+
+/stockfish.wasm
+  Content-Type: application/wasm
