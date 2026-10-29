@@ -1,11 +1,14 @@
 // Offline puzzle generator: plays varied low/medium-strength engine games in headless Chromium with the
 // bundled Stockfish, finds positions with one clearly winning move, verifies the line, and tags themes by rule.
 // Usage: start server.cjs, then: node tools/generate-puzzles.cjs <count> <out.json> [seed]
+// Key moments from real games: MODE=games GAMES=games.json node tools/generate-puzzles.cjs 0 <out.json>
+// (games.json: [{id, side, moves}] with moves as space-separated SAN from the start position)
 const {chromium}=require('playwright');const fs=require('fs');const found=[];
+const GAMES=process.env.GAMES?JSON.parse(fs.readFileSync(process.env.GAMES,'utf8')):[];
 const MODE=process.env.MODE||'any',COUNT=Number(process.argv[2]||40),OUT=process.argv[3]||'puzzles-out.json',SEED=Number(process.argv[4]||1),WORKERS=Number(process.env.WORKERS||4);
 (async()=>{const browser=await chromium.launch();const page=await browser.newPage();page.on('console',m=>{if(m.type()!=='log')return;let t=m.text();if(t.startsWith('PUZZLE ')){found.push(JSON.parse(t.slice(7)));fs.writeFileSync(OUT,JSON.stringify(found,null,1))}else console.log(t)});
 await page.goto('http://127.0.0.1:8767/');await page.waitForFunction(()=>window.workshopTest);
-let res=await page.evaluate(async([COUNT,SEED,WORKERS,MODE])=>{
+let res=await page.evaluate(async([COUNT,SEED,WORKERS,MODE,GAMES])=>{
 const Chess=workshopTest.Chess,V={p:1,n:3,b:3,r:5,q:9,k:0};
 let seed=SEED;const rand=()=>{seed=(seed*1103515245+12345)%2147483648;return seed/2147483648};
 function engine(){let w=new Worker('stockfish.js'),q=[],cur=null;w.onmessage=e=>{let l=String(e.data);if(cur)cur.lines.push(l);if(cur&&cur.done(l)){let c=cur;cur=null;c.resolve(c.lines);next()}};
@@ -50,24 +53,33 @@ const sets=['RP|R','RPP|RP','P|','PP|P','NP|P','BP|P','Q|R','RB|R','RN|R','PPP|P
 function endgameStart(){for(;;){let c=new Chess();c.clear();let [w,b]=sets[Math.floor(rand()*sets.length)].split('|');if(rand()<.5)[w,b]=[b,w];let free=()=>{for(;;){let s=sq(Math.floor(rand()*8),Math.floor(rand()*8));if(!c.get(s))return s}};
  c.put({type:'k',color:'w'},free());c.put({type:'k',color:'b'},free());for(let [str,color] of [[w,'w'],[b,'b']])for(let ch of str){let s;do{s=free()}while(ch==='P'&&(s[1]==='1'||s[1]==='8'));c.put({type:ch.toLowerCase(),color},s)}
  let f=c.fen().split(' ');f[1]=rand()<.5?'w':'b';let g=new Chess();if(!g.load(f.join(' ')))continue;let opp=new Chess(f.join(' '));let ff=f.slice();ff[1]=ff[1]==='w'?'b':'w';let o=new Chess();if(!o.load(ff.join(' ')))continue;if(o.in_check()||g.game_over()||g.moves().length===0)continue;return g}}
+// Verify deeper and build a forced line (player moves must stay clearly unique). Returns the puzzle or null.
+async function verify(e,fen,p1,extra,id){
+ let v=await e.search(fen,{depth:14,multipv:2});let a=v.pvs[1],b=v.pvs[2];
+ if(!(a&&b&&a.pv[0]===p1.pv[0]&&a.score-b.score>=250&&(a.score>=250||a.mate>0)))return null;
+ let c=new Chess(fen),line=[],ok=true,mate=a.mate>0;let pv=a.pv.slice(0,mate?Math.min(a.pv.length,2*a.mate-1):5);
+ for(let i=0;i<pv.length;i++){if(i>0&&i%2===0){let w=await e.search(c.fen(),{depth:12,multipv:2});if(!w.pvs[2]||w.pvs[1].pv[0]!==pv[i]||(w.pvs[1].score-w.pvs[2].score<200&&!(w.pvs[1].mate>0&&w.pvs[2].mate>0))){break}}let m=uci(c,pv[i]);if(!m){ok=false;break}line.push(m.san);if(c.in_checkmate())break}
+ if(line.length%2===0)line.pop();// end on the solver's move
+ if(!ok||!line.length)return null;let finalMate=(()=>{let t=new Chess(fen);for(let m of line)t.move(m);return t.in_checkmate()})();let T=themes(fen,line,finalMate),th=T.tags;
+ let plies=line.length,base=th.includes('quiet move')?1400:['fork','pin','skewer','discovered attack'].some(x=>th.includes(x))?950:th.includes('hanging pieces')?600:th.includes('mate')?550:800;let rating=Math.round(Math.min(2400,base+(plies-1)/2*300+Math.max(0,(v.first||1)-3)*60)/50)*50;
+ seen.add(fen.split(' ').slice(0,4).join(' '));let p={fen,line,themes:th,why:T.why,rating,eval:a.mate?('mate '+a.mate):(a.score/100).toFixed(1),...extra};out.push(p);console.log('PUZZLE '+JSON.stringify(p));console.log('#'+out.length+' w'+id+' '+th.slice(0,4).join(',')+' '+line.join(' ')+' r'+rating);return p}
+// MODE=games: key moments from real games. Only the given side's moves count, and only when the move actually played
+// was the engine's clearly unique winning move.
+async function gamesWorker(id){let e=engine();await e.init();
+ for(let k=id;k<GAMES.length;k+=WORKERS){let G=GAMES[k],g=new Chess(),sans=G.moves.split(' ');
+  for(let i=0;i<sans.length;i++){let fen=g.fen();if(g.turn()===G.side&&i>=16&&!seen.has(fen.split(' ').slice(0,4).join(' '))){let r=await e.search(fen,{depth:10,multipv:2}),p1=r.pvs[1],p2=r.pvs[2],played=g.move(sans[i]);g.undo();
+    if(p1&&p2&&played&&p1.pv[0]===played.from+played.to+(played.promotion||'')&&p1.score-p2.score>=250&&(p1.score>=250||p1.mate>0)&&p2.score<=150)await verify(e,fen,p1,{game:G.id,ply:i},id)}
+   g.move(sans[i])}}}
 async function worker(id){let e=engine();await e.init();
  while(out.length<COUNT){let g=new Chess();if(MODE==='endgame')g=endgameStart();else for(let m of openings[Math.floor(rand()*openings.length)].split(' '))g.move(m);let prevEval=null,ply=g.history().length,skillW=Math.floor(rand()*8)+2,skillB=Math.floor(rand()*8)+2;
   while(!g.game_over()&&ply<110&&out.length<COUNT){let fen=g.fen();let r=await e.search(fen,{depth:10,multipv:2});let p1=r.pvs[1],p2=r.pvs[2];
    if(p1&&p2&&prevEval!==null&&(ply>=10||MODE==='endgame')){let gap=p1.score-p2.score,winning=MODE==='mate'?p1.mate>0:(p1.score>=250||p1.mate>0),wasLevel=-prevEval<=120;
     if(winning&&wasLevel&&gap>=250&&p2.score<=150&&!seen.has(fen.split(' ').slice(0,4).join(' '))){
-     // verify deeper and build a forced line (player moves must stay clearly unique)
-     let v=await e.search(fen,{depth:14,multipv:2});let a=v.pvs[1],b=v.pvs[2];
-     if(a&&b&&a.pv[0]===p1.pv[0]&&a.score-b.score>=250&&(a.score>=250||a.mate>0)){
-      let c=new Chess(fen),line=[],ok=true,mate=a.mate>0;let pv=a.pv.slice(0,mate?Math.min(a.pv.length,2*a.mate-1):5);
-      for(let i=0;i<pv.length;i++){if(i>0&&i%2===0){let w=await e.search(c.fen(),{depth:12,multipv:2});if(!w.pvs[2]||w.pvs[1].pv[0]!==pv[i]||(w.pvs[1].score-w.pvs[2].score<200&&!(w.pvs[1].mate>0&&w.pvs[2].mate>0))){break}}let m=uci(c,pv[i]);if(!m){ok=false;break}line.push(m.san);if(c.in_checkmate())break}
-      if(line.length%2===0)line.pop();// end on the solver's move
-      if(ok&&line.length){let finalMate=(()=>{let t=new Chess(fen);for(let m of line)t.move(m);return t.in_checkmate()})();let T=themes(fen,line,finalMate),th=T.tags;
-       let plies=line.length,base=th.includes('quiet move')?1400:['fork','pin','skewer','discovered attack'].some(x=>th.includes(x))?950:th.includes('hanging pieces')?600:th.includes('mate')?550:800;let rating=Math.round(Math.min(2400,base+(plies-1)/2*300+Math.max(0,(v.first||1)-3)*60)/50)*50;
-       seen.add(fen.split(' ').slice(0,4).join(' '));out.push({fen,line,themes:th,why:T.why,rating,eval:a.mate?('mate '+a.mate):(a.score/100).toFixed(1),ply});console.log('PUZZLE '+JSON.stringify(out[out.length-1]));console.log('#'+out.length+' w'+id+' '+th.slice(0,4).join(',')+' '+line.join(' ')+' r'+rating)}}}}
+     await verify(e,fen,p1,{ply},id)}}
    prevEval=p1?p1.score:null;
    // pick a move: mostly a weaker engine move, sometimes random (to create mistakes)
    let mv;if(rand()<0.12){let ms=g.moves();mv=ms[Math.floor(rand()*ms.length)];g.move(mv)}else{let s=await e.search(fen,{depth:4+Math.floor(rand()*4),skill:g.turn()==='w'?skillW:skillB});uci(g,s.best)}
    prevEval=g.history().length?prevEval:null;ply++;}
  }}
-await Promise.all(Array.from({length:WORKERS},(_,i)=>worker(i)));return out.slice(0,COUNT)},[COUNT,SEED,WORKERS,MODE]);
+await Promise.all(Array.from({length:WORKERS},(_,i)=>MODE==='games'?gamesWorker(i):worker(i)));return MODE==='games'?out:out.slice(0,COUNT)},[COUNT,SEED,WORKERS,MODE,GAMES]);
 if(!found.length)fs.writeFileSync(OUT,JSON.stringify(res,null,1));console.log('wrote',res.length);await browser.close()})();
