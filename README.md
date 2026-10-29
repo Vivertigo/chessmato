@@ -1,4 +1,6 @@
-# Chess Workshop — Training Arena
+# CheckMato
+
+Offline, untimed chess training in the browser. Originally built on the "Chess Workshop — Training Arena" base.
 
 Open **Start Chess Workshop.cmd** for the full app, including the local Stockfish opponent. It serves only this app on http://127.0.0.1:8767 and opens your default browser. Node.js is required; the launcher uses the existing Codex runtime when Node is not on PATH.
 For puzzles and minigames without a server, open index.html. Keep every app file in this folder. Refresh the browser after an update.
@@ -52,7 +54,7 @@ Use Your opening coach beside the board. White has an Italian-based 1.e4 starter
 Yellow guides show only the source piece initially. Click it to highlight both source and destination. Hover continues to preview other pieces without changing the board.
 Switch off guides for a recall test. Completed sessions track first-choice repertoire recall, with guided/unaided decisions separated. These measures are NOT engine opening accuracy. Wrong alternatives are flagged as departures from the selected repertoire, not automatically called blunders.
 Correct moves receive a plain-English purpose. A departure offers retry or keeping the move on a two-sided analysis board. Completion waits for Okay before selecting another practice line.
-An optional personal baseline (results reported from outside ChessMato) can live in `personal-data.js`, which is gitignored and stays on your device. Without it, the profile starts neutral and is built from your practice and imported games. Personal positions are never fabricated from move names.
+An optional personal baseline (results reported from outside CheckMato) can live in `personal-data.js`, which is gitignored and stays on your device. Without it, the profile starts neutral and is built from your practice and imported games. Personal positions are never fabricated from move names.
 The short running profile updates after each opening session and is separately exportable/restorable using the coach-profile backup controls.
 Since implemented (2026-10-29): pre-move blunder check, puzzles from your own missed forcing moves in bot games, resignation review and play-on, and measured middlegame/resignation stats. Still planned: full phase-based post-game review, and personal puzzles from your earlier games (needs your PGNs or FENs).
 
@@ -68,12 +70,12 @@ No hosted service is required or planned. The current PC engine uses a localhost
 ## Additional browser verification
 Passed actual click tests for all guide stages, original-position immutability, White and Black opening startup, full opening completion, deviation/retry, profile accounting, puzzle miss/win confirmation, zero premature advance, guide toggles, real Stockfish hints, no points from assisted moves, and stale-hint removal.
 
-## ChessMato interface
-The program is now named ChessMato. Its background is tomato red (#ff6347); the chessboard palette is unchanged.
+## CheckMato interface
+The program is now named CheckMato. Its background is tomato red (#ff6347); the chessboard palette is unchanged.
 Ten main workspaces: Play, Openings, Puzzles, Minigames, Lessons, Progress, Player profile, Coach Gary, Analysis, Settings. Each has focused subsections (23 total). Tab switches preserve the current position/game. Keyboard arrow keys navigate tablists; mobile navigation scrolls horizontally without widening the page.
 Gary Bendt is the fictional coach persona, with a legendary 3200 character rating and a 400–3200 coaching range. His practical, calm approach is inspired by Carlsen; he is not presented as Magnus himself. The player’s rating remains separate and unchanged.
 Backups are consolidated under Settings → Backups, and scoring/implementation notes live under Settings → About & scoring.
-Use Start ChessMato.cmd (or the original launcher) for local bot games. Storage keys are preserved so the rebrand does not reset progress.
+Use Start CheckMato.cmd (or the original launcher) for local bot games. Storage keys are preserved so the rebrand does not reset progress.
 
 ## Added 2026-10-29
 - **Coaches tab**: offline chats with Gary Bendt and Claudia Herman. Answers come from local rules (a scan of direct attacks, checks, captures and mate threats), your saved progress, and existing engine results. No internet connection needed.
@@ -83,6 +85,6 @@ Use Start ChessMato.cmd (or the original launcher) for local bot games. Storage 
 - **Openings**: Mixed mode, where the opponent varies its replies within your repertoire.
 - **Bot games**: an optional blunder check before each move (warns, never blocks), a checks/captures/threats panel, a resignation review before resigning, and practice play-on from saved resignations.
 - **Player profile**: structured strengths and priorities, Measured progress, and Resignation review.
-- **My games** (Player profile): import PGN text or .pgn files from Lichess, Chess.com or anywhere, with your side found by username. It shows results, how games ended (Lichess "Normal" without mate counts as resignation), the opening name (from the Lichess list), and where you or your opponent left your repertoire. The optional local-engine review gives Kudos by phase, blunders and biggest swings. Missed forcing moves (mates, checks, captures) become personal puzzles from the exact game position, and resigned losses go to the Resignation review. Finished ChessMato bot games are saved automatically. You can export one game or all of them as .pgn.
-- **Puzzle library** (Puzzles tab): download lichess_db_puzzle.csv.zst once from database.lichess.org, then pick it in ChessMato. Choose themes, a rating range and how many to add (up to 5,000 in total). The file is read and filtered on your device. Each puzzle starts after the opponent's move, is checked for legality, keeps its Lichess rating and themes, and joins the practice queue. Built-in and personal puzzles are unaffected, and "Remove all Lichess puzzles" undoes an import.
+- **My games** (Player profile): import PGN text or .pgn files from Lichess, Chess.com or anywhere, with your side found by username. It shows results, how games ended (Lichess "Normal" without mate counts as resignation), the opening name (from the Lichess list), and where you or your opponent left your repertoire. The optional local-engine review gives Kudos by phase, blunders and biggest swings. Missed forcing moves (mates, checks, captures) become personal puzzles from the exact game position, and resigned losses go to the Resignation review. Finished CheckMato bot games are saved automatically. You can export one game or all of them as .pgn.
+- **Puzzle library** (Puzzles tab): download lichess_db_puzzle.csv.zst once from database.lichess.org, then pick it in CheckMato. Choose themes, a rating range and how many to add (up to 5,000 in total). The file is read and filtered on your device. Each puzzle starts after the opponent's move, is checked for legality, keeps its Lichess rating and themes, and joins the practice queue. Built-in and personal puzzles are unaffected, and "Remove all Lichess puzzles" undoes an import.
 - Tests: `CHESSMATO_NO_BROWSER=1 node server.cjs`, then `node tests/<name>.test.cjs` (requires Playwright). Suites: appearance, core, coaches, variety, roadmap, thinking, pgn, lichess.

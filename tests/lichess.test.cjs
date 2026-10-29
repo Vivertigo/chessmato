@@ -24,7 +24,7 @@ let st=await page.evaluate(()=>({ids:chessMatoLichess.get().puzzles.map(p=>p.id)
 ok(st.ids.join()==='00sHx,tBack,tFork'&&st.n===builtIn+3,'only valid puzzles in range are stored and merged; built-in puzzles kept');
 ok(/^r?q?/.test(st.d.fen)&&st.d.fen.split(' ')[1]==='w'&&st.d.line.join(' ')==='Be6+ Kd8 Qf8#','opponent move applied first; solution converted to SAN (Be6+ Kd8 Qf8#)');
 ok(/opponent just played Kd7/.test(st.d.description)&&/Find mate in 2/.test(st.d.description)&&st.d.rating===1760&&st.d.title==='Mate in 2 · White · Lichess','description names the opponent move, goal and Lichess rating');
-ok(st.back.tags.includes('back rank')&&st.back.tags.includes('mate')&&st.back.tags.includes('lichess'),'Lichess themes mapped to ChessMato tags (back rank, mate)');
+ok(st.back.tags.includes('back rank')&&st.back.tags.includes('mate')&&st.back.tags.includes('lichess'),'Lichess themes mapped to CheckMato tags (back rank, mate)');
 ok(await page.evaluate(()=>!JSON.parse(localStorage.getItem('chess-workshop-v1')).drills.some(d=>d.id.startsWith('li-'))),'Lichess puzzles are not copied into the drill backup key');
 console.log('Solve one');
 await page.evaluate(()=>load(data.drills.find(d=>d.id==='li-tBack')));await page.click('#board [data-s="a1"]');await page.click('#board [data-s="a8"]');await page.waitForTimeout(300);
