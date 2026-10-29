@@ -1,0 +1,8 @@
+Piece artwork:
+Classic (cburnett) by Colin M. L. Burnett, GPL-2.0-or-later.
+Merida by Armando Hernandez Marroquin, GPL-2.0-or-later.
+Original editable SVG source files are bundled in cburnett/ and merida/.
+Source: https://github.com/lichess-org/lila/tree/master/public/piece
+Attribution/license reference: https://github.com/lichess-org/lila/blob/master/COPYING.md
+GPL text: LICENSE-GPL-2.0.txt
+All assets are loaded locally; no network access is used during play.
