@@ -1,0 +1,5 @@
+# Internal process notes and handoff files (kept locally, not published)
+CLAUDIA_HANDOFF.md
+PROMPT_FOR_CLAUDIA.txt
+*.zip
+node_modules/
