@@ -1,0 +1,76 @@
+/* CheckMato tomato theme: vine-green chrome, tomato-red accents, a checkered motif from the logo and softer rounded
+   cards. Visual only: no layout logic or chess behaviour depends on anything here. The board's own colours are unchanged. */
+:root{--tomato:#ff6347;--tomato-deep:#c4351f;--tomato-dark:#8f2414;--vine:#173323;--vine-2:#1f4430;--vine-3:#2a5a3e;--leaf:#6fb27a;--leaf-light:#a8dcae;--cream:#fff5dc;--seed:#f6d27a;
+  --surface:#15241c;--raised:#1d3326;--stroke:#2f5240;--ink:#f3f6ee;--quiet:#b6c8bb;--accent:#a8dcae;
+  --checker:repeating-conic-gradient(var(--tomato-deep) 0 25%,var(--cream) 0 50%) 0 0/10px 10px}
+body{background:var(--tomato) radial-gradient(1200px 600px at 85% -10%,rgba(255,214,190,.35),transparent 60%) fixed}
+body,#app-workspace{background-color:var(--tomato)}
+#app-workspace{background:transparent}
+/* Header: vine green with a checkered ribbon underneath, like the logo. */
+header{background:linear-gradient(180deg,var(--vine-2),var(--vine));border-bottom:0;position:relative;box-shadow:0 6px 18px rgba(80,18,8,.28);z-index:2}
+header:after{content:"";position:absolute;left:0;right:0;bottom:-8px;height:8px;background:var(--checker);opacity:.95}
+header h1{color:var(--cream);letter-spacing:-.3px}header small{color:var(--leaf-light)}
+.brand-logo{transition:transform .35s ease}.brand:hover .brand-logo{transform:rotate(-8deg) scale(1.06)}
+.header-score{white-space:nowrap;background:var(--cream);color:var(--tomato-dark);border:0;border-radius:999px;font-weight:650;padding:7px 14px;box-shadow:inset 0 -2px 0 rgba(143,36,20,.18)}
+/* Workspace rail */
+#primary-tabs{background:linear-gradient(180deg,var(--vine),#10261a);border-right:0;padding-top:30px}
+.nav-group{color:var(--leaf-light);opacity:.8}
+#primary-tabs .rail-tabs>button{color:#d3e2d6;border-radius:12px}
+#primary-tabs .rail-tabs>button:hover{background:var(--vine-2);color:#fff}
+#primary-tabs .rail-tabs>button.current-tab{background:var(--tomato-deep);color:var(--cream);border-left:4px solid var(--leaf-light);box-shadow:0 3px 10px rgba(0,0,0,.25)}
+.mentor-card{border-bottom-color:var(--stroke)}
+.mentor-monogram{position:relative;border:0;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff8a70,var(--tomato-deep) 70%);color:var(--cream);box-shadow:inset 0 -3px 0 rgba(0,0,0,.18)}
+.mentor-monogram:before{content:"";position:absolute;top:-5px;left:50%;width:12px;height:7px;margin-left:-6px;background:var(--leaf);border-radius:60% 60% 40% 40%;clip-path:polygon(0 100%,20% 20%,50% 70%,80% 20%,100% 100%)}
+.mentor-card button{border-radius:999px}
+/* Headings on the tomato background keep the ivory outlined text; the section tabs become pills. */
+#section-tabs{border-bottom:2px dashed rgba(143,36,20,.45);gap:6px}
+#section-tabs button{border-radius:999px;padding:7px 14px}
+#section-tabs button:hover{background:rgba(23,51,35,.25)}
+#section-tabs button[aria-selected=true]{background:var(--vine);color:var(--cream);box-shadow:0 3px 8px rgba(80,18,8,.3)}
+.eyebrow{color:var(--cream)}
+/* "Offline ready" becomes a little tomato sticker. */
+.offline-label{display:inline-flex;align-items:center;gap:7px;background:var(--vine);color:var(--cream)!important;border:1px solid var(--leaf);border-radius:999px;padding:6px 12px 6px 9px;font-weight:650;text-shadow:none!important}
+.offline-label:before{content:"";width:10px;height:10px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff9a80,var(--tomato) 70%);box-shadow:0 -3px 0 -1px var(--leaf)}
+/* Cards */
+.workspace-panel{background:linear-gradient(180deg,var(--raised),var(--surface) 140px);border:0;border-radius:18px;box-shadow:0 10px 26px rgba(90,20,10,.28);position:relative;overflow:hidden}
+.workspace-panel:before{content:"";position:absolute;left:0;right:0;top:0;height:5px;background:linear-gradient(90deg,var(--leaf),var(--leaf-light),var(--leaf))}
+.workspace-panel h2{color:var(--cream)}
+.workspace-panel .notice{background:var(--vine-2);border-left:4px solid var(--seed);border-radius:10px}
+.workspace-panel details>summary{color:var(--leaf-light);cursor:pointer}
+.workspace-panel details{border-top-color:var(--stroke)}
+.drill,.topic-button,.repertoire-button,.system-card{border-radius:12px;border-color:var(--stroke);background:#1a2f23}
+.drill.active{background:var(--vine-3);border-color:var(--leaf-light)}
+#explain{background:rgba(23,51,35,.92);color:var(--ink);border-left:4px solid var(--leaf);border-radius:12px;box-shadow:0 4px 12px rgba(80,18,8,.2)}
+#kudos{background:var(--vine-2);border-left-color:var(--seed);border-radius:12px}
+#notebook p{background:#1a2f23;border-left-color:var(--seed);border-radius:10px}
+/* Controls */
+button,select,input,textarea{border-radius:12px;background:#1d3528;border-color:#3d6a4f;color:var(--ink)}
+button{border-radius:999px;padding-left:15px;padding-right:15px;transition:transform .1s,box-shadow .15s}
+button:hover{background:#28503a}
+button:active:not(:disabled){transform:translateY(1px)}
+.primary,#thinking-bar button.primary{background:var(--tomato-deep);border-color:#ff8a70;color:var(--cream);box-shadow:0 3px 0 var(--tomato-dark),0 6px 12px rgba(80,18,8,.25)}
+.primary:hover{background:#b02d18}
+.primary:active:not(:disabled){box-shadow:0 1px 0 var(--tomato-dark)}
+button:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--seed);outline-offset:3px}
+input[type=checkbox],input[type=range]{accent-color:var(--tomato-deep)}
+/* The board: a vine-green frame with soft corners. Squares keep their colours. */
+.board{border-color:var(--vine);border-width:6px;border-radius:14px;overflow:hidden;box-shadow:0 14px 30px rgba(80,18,8,.35)}
+#board.thinking{border-color:#2f6fb0}
+.hs-clock{border-radius:12px;background:var(--surface)}
+/* Dialogs and the welcome tour */
+dialog,#tour{background:var(--surface);color:var(--ink);border:0;border-radius:20px;box-shadow:0 20px 50px rgba(40,8,2,.45);overflow:hidden}
+dialog:before,#tour:before{content:"";display:block;height:8px;margin:-24px -24px 18px;background:var(--checker)}
+#tour:before{margin:-22px -24px 16px}
+dialog::backdrop{background:rgba(60,12,4,.55)}
+/* Footer with the checkered ribbon on top */
+footer{position:relative;border-top:0;padding-top:22px}
+footer:before{content:"";position:absolute;left:0;right:0;top:0;height:8px;background:var(--checker)}
+/* Busy state (engine thinking, imports): a small spinning tomato next to the status line. */
+#status{display:flex;align-items:center;gap:8px}
+body.cm-busy #status:before{content:"";flex:none;width:16px;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff9a80,var(--tomato-deep) 70%);box-shadow:0 -4px 0 -2px var(--leaf);animation:cm-spin 1s linear infinite}
+@keyframes cm-spin{to{transform:rotate(360deg)}}
+:root[data-motion=reduced] body.cm-busy #status:before{animation:none}
+/* Scrollbars */
+*{scrollbar-color:var(--tomato-deep) transparent}
+@media(max-width:900px){#primary-tabs{padding-top:16px;border-bottom:0}#primary-tabs .rail-tabs>button{border-radius:999px}#primary-tabs .rail-tabs>button.current-tab{border-left:0;border-bottom:0}}
+@media(max-width:680px){.workspace-panel{border-radius:14px}.board{border-width:4px;border-radius:10px}header:after{height:6px;bottom:-6px}}
