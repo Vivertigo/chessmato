@@ -5,7 +5,7 @@ const KEY='chessmato-tour-v1';
 const STEPS=[
  {title:'Welcome to CheckMato',body:'Untimed chess training that runs on your device. No account, no clocks in training, nothing uploaded.',img:true},
  {title:'Moving pieces',body:'Click a piece, then click a highlighted square. You can also drag pieces. Hover over any piece to preview where it can go; previews never change the game.'},
- {title:'Think before you move',body:'With the thinking board on, your first move tints the board blue. Play out a whole line for both sides, step back and forth, then press Play to send only your first move. Reset returns to the real game.'},
+ {title:'Think before you move',body:'Want to try a line first? Right-click or long-press the board and choose "Think it through" (or press T, or the Dream Board button). The Dream Board turns blue and only you can see it: play out a whole line for both sides, step back and forth, then press Play to send only your first move. Reset returns to the real game.'},
  {title:'Where to start',body:'Puzzles for tactics, Openings for your repertoire, Play for games against the bot or Guess the move, and Coaches for a three-task Daily plan from Gary Bendt or Claudia Herman.',go:['coach','plan'],goLabel:'Open the Daily plan'},
  {title:'Your data stays here',body:'Progress is saved in this browser. Use Settings → Backups → Back up everything to keep a copy or move to another device. Import your own games under Player profile → My games.'},
  {title:'Use it offline',body:'In Chrome or Edge (desktop or Android), install CheckMato from Settings → About. It then opens offline from your desktop or home screen.'}];

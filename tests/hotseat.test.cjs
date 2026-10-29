@@ -38,8 +38,8 @@ await page.evaluate(()=>{let H=chessMatoHotseat.get();game.load('7k/8/8/8/8/8/8/
 ok(h.over&&h.result==='1/2-1/2'&&/cannot checkmate/.test(h.reason),'a flag is a draw when the opponent cannot possibly checkmate');
 console.log('Thinking board and leaving');
 await page.click('#hs-new');await page.evaluate(()=>{sessionStorage.setItem('thinking-test','1');localStorage.setItem('chessmato-thinking-v1','on')});await page.reload();await page.waitForFunction(()=>window.chessMatoHotseat);
-await page.evaluate(()=>chessUITest.navigate('play','hotseat'));await page.selectOption('#hs-control','z5');await page.click('#hs-start');await mv('e2','e4');
-ok(await page.evaluate(()=>game.history().length===0&&chessMatoThinking.get()),'with the thinking board on, nothing is played until Play');await page.waitForTimeout(400);
+await page.evaluate(()=>chessUITest.navigate('play','hotseat'));await page.selectOption('#hs-control','z5');await page.click('#hs-start');await page.click('#think-open');await mv('e2','e4');
+ok(await page.evaluate(()=>game.history().length===0&&chessMatoThinking.get()),'on the Dream Board, nothing is played until Play');await page.waitForTimeout(400);
 ok((await H()).clock.w<300000,'the clock keeps running while thinking');await page.click('#thinking-play');ok(await page.evaluate(()=>game.history().join()==='e4'&&game.turn()==='b'),'Play sends the move and switches the clock');
 await page.evaluate(()=>{sessionStorage.removeItem('thinking-test');localStorage.setItem('chessmato-thinking-v1','off')});
 await page.evaluate(()=>load(data.drills.find(d=>d.id==='backrank')));ok(await page.evaluate(()=>!chessMatoHotseat.get()),'loading a puzzle ends the two-player game');

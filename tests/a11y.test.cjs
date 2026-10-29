@@ -19,8 +19,8 @@ await page.focus('#tab-puzzles');await page.keyboard.press('ArrowDown');
 ok(await page.evaluate(()=>document.activeElement.id==='tab-minigames'&&!$('tab-minigames').hasAttribute('tabindex')||document.activeElement.getAttribute('role')==='tab'&&document.activeElement.id!=='tab-puzzles'),'arrow keys move between workspaces');
 console.log('Thinking board by keyboard');
 await page.evaluate(()=>{$('mode').value='free';$('mode').dispatchEvent(new Event('change'));chessUITest.navigate('puzzles','solve')});
-await page.focus('#board [data-s="e2"]');await page.keyboard.press('Enter');await page.keyboard.press('ArrowUp');await page.keyboard.press('ArrowUp');await page.keyboard.press('Enter');
-ok(await page.evaluate(()=>$('board').classList.contains('thinking')&&document.activeElement.dataset.s==='e4'&&/1\. e4/.test($('thinking-line').textContent)),'Enter, arrows, Enter starts a thinking line and keeps focus on the board');
+await page.focus('#board [data-s="e2"]');await page.keyboard.press('t');await page.keyboard.press('Enter');await page.keyboard.press('ArrowUp');await page.keyboard.press('ArrowUp');await page.keyboard.press('Enter');
+ok(await page.evaluate(()=>$('board').classList.contains('thinking')&&document.activeElement.dataset.s==='e4'&&/1\. e4/.test($('thinking-line').textContent)),'T, then Enter, arrows, Enter plays a thinking line and keeps focus on the board');
 // Black reply e7-e5 by keyboard, then step back with [ and forward with ].
 await page.keyboard.press('ArrowUp');await page.keyboard.press('ArrowUp');await page.keyboard.press('ArrowUp');await page.keyboard.press('Enter');
 await page.keyboard.press('ArrowDown');await page.keyboard.press('ArrowDown');await page.keyboard.press('Enter');
@@ -33,8 +33,8 @@ ok(contrast===0,'square letters are recoloured for the blue thinking tint ('+con
 await page.keyboard.press('p');
 ok(await page.evaluate(()=>!$('board').classList.contains('thinking')&&game.history().join(' ')==='e4'),'P plays only the first move of the line');
 ok(await page.evaluate(()=>!!document.activeElement.closest('#board')),'focus stays on the board after playing');
-ok(await page.evaluate(()=>/P \(or Ctrl\+Enter\) plays/.test($('board-keyboard-help').textContent)),'the keyboard help lists the shortcut');
-await page.focus('#board [data-s="d2"]');await page.keyboard.press('Enter');await page.keyboard.press('ArrowUp');await page.keyboard.press('ArrowUp');await page.keyboard.press('Enter');
+ok(await page.evaluate(()=>/T opens the Dream Board/.test($('board-keyboard-help').textContent)&&/P \(or Ctrl\+Enter\) plays/.test($('board-keyboard-help').textContent)),'the keyboard help lists the shortcut');
+await page.focus('#board [data-s="d2"]');await page.keyboard.press('t');await page.keyboard.press('Enter');await page.keyboard.press('ArrowUp');await page.keyboard.press('ArrowUp');await page.keyboard.press('Enter');
 await page.keyboard.press('Escape');ok(await page.evaluate(()=>!$('board').classList.contains('thinking')&&game.history().join(' ')==='e4'),'Escape leaves the thinking board without playing');
 console.log('Settings labels');
 await page.evaluate(()=>chessUITest.navigate('settings','accessibility'));

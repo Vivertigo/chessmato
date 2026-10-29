@@ -20,7 +20,7 @@ await page.evaluate(()=>load(data.drills.find(d=>d.id==='backrank')));await drag
 ok(await page.evaluate(()=>document.querySelector('.feedback-modal').open&&/won/i.test($('resulttitle').textContent)),'a puzzle can be solved by dragging');await page.click('#resultokay');
 await page.evaluate(()=>{chessMatoThinking.exit();sessionStorage.setItem('thinking-test','1');localStorage.setItem('chessmato-thinking-v1','on')});await page.reload();await page.waitForFunction(()=>window.chessMatoFeel);
 await page.evaluate(()=>{chessUITest.navigate('positions','manual');$('mode').value='free';$('mode').dispatchEvent(new Event('change'))});
-await dragMove('g1','f3');ok(await page.evaluate(()=>chessMatoThinking.get()&&chessMatoThinking.get().line[0]==='Nf3'&&game.history().length===0),'with the thinking board on, a drag starts a private line (nothing played)');
+await page.evaluate(()=>chessMatoThinking.open());await dragMove('g1','f3');ok(await page.evaluate(()=>chessMatoThinking.get()&&chessMatoThinking.get().line[0]==='Nf3'&&game.history().length===0),'on the Dream Board, a drag adds to the private line (nothing played)');
 await page.evaluate(()=>{chessMatoThinking.exit();sessionStorage.removeItem('thinking-test');localStorage.setItem('chessmato-thinking-v1','off')});
 console.log('Settings');
 await page.evaluate(()=>chessUITest.navigate('settings','accessibility'));
