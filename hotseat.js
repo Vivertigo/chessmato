@@ -21,35 +21,40 @@ const halfmoves=()=>Number(game.fen().split(' ')[4])||0;
 function canMate(color){let pcs=[];for(let r of game.board())for(let p of r)if(p&&p.color===color&&p.type!=='k')pcs.push(p.type);if(!pcs.length)return false;if(pcs.length===1&&(pcs[0]==='n'||pcs[0]==='b'))return false;return true}
 function captured(){let s={w:0,b:0};for(let m of game.history({verbose:true}))if(m.captured)s[m.color]+=V[m.captured];return s}
 const fmt=ms=>{ms=Math.max(0,ms);let s=Math.ceil(ms/1000);if(ms<10000&&ms>0)return (ms/1000).toFixed(1);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
+// opts (used by live play): panel, orient ('w'/'b' keeps the board turned to one player), remote {authority} (a guest
+// device shows the host's clock and result instead of deciding them), onMove, clockAfterFirst (clocks start once both
+// sides have moved), site (PGN Site tag).
 function start(white,black,control,opts={}){stopTick();let c=ctl(control),rev=!!opts.revelation;
-  $('mode').value='free';$('mode').dispatchEvent(new Event('change'));if(window.chessUITest)chessUITest.navigate('play','hotseat');game.reset();baseFen=game.fen();selected=hover=null;flipped=false;
-  H={players:{w:white,b:black},control:rev?'revelation':c[0],label:rev?'Revelation · 1 minute each':c[1],base:rev?60:c[2],inc:rev?0:c[3],clock:{w:(rev?60:c[2])*1000,b:(rev?60:c[2])*1000},fen:game.fen(),startFen:game.fen(),over:false,revelation:rev,mainResult:opts.mainResult||null,offer:null,paused:false,last:performance.now(),moves:0,onEnd:opts.onEnd||null};
+  $('mode').value='free';$('mode').dispatchEvent(new Event('change'));if(window.chessUITest)chessUITest.navigate(...(opts.panel||['play','hotseat']));game.reset();baseFen=game.fen();selected=hover=null;flipped=opts.orient==='b';
+  H={players:{w:white,b:black},control:rev?'revelation':c[0],label:rev?'Revelation · 1 minute each':c[1],base:rev?60:c[2],inc:rev?0:c[3],clock:{w:(rev?60:c[2])*1000,b:(rev?60:c[2])*1000},fen:game.fen(),startFen:game.fen(),over:false,revelation:rev,mainResult:opts.mainResult||null,offer:null,paused:false,last:performance.now(),moves:0,onEnd:opts.onEnd||null,onMove:opts.onMove||null,orient:opts.orient||null,remote:opts.remote||null,clockAfterFirst:!!opts.clockAfterFirst,site:opts.site||null};
   $('title').textContent=(rev?'Revelation: ':'')+white+' vs '+black;$('description').textContent=H.label+(rev?' · if drawn, captured material decides; equal = Black wins':'');
-  render();if(timed())startTick();draw();note(white+' (White) to move.')}
-function startTick(){stopTick();H.last=performance.now();tick=setInterval(()=>{if(!H||H.over||H.paused)return;let now=performance.now(),t=game.turn();H.clock[t]-=now-H.last;H.last=now;if(H.clock[t]<=0){H.clock[t]=0;flag(t)}drawClocks()},100)}
+  render();if(timed())startTick();draw();if(!opts.quiet)note(white+' (White) to move.')}
+const authority=()=>!H||!H.remote||H.remote.authority;
+const clockOn=()=>!H.clockAfterFirst||game.history().length>=2;
+function startTick(){stopTick();H.last=performance.now();tick=setInterval(()=>{if(!H||H.over||H.paused)return;let now=performance.now(),t=game.turn();if(clockOn())H.clock[t]-=now-H.last;H.last=now;if(H.clock[t]<=0){H.clock[t]=0;if(authority())flag(t)}drawClocks()},100)}
 function stopTick(){if(tick)clearInterval(tick);tick=null}
 function flag(t){let o=t==='w'?'b':'w';if(canMate(o))end(o==='w'?'1-0':'0-1',(t==='w'?'White':'Black')+' ran out of time');else end('1/2-1/2',(t==='w'?'White':'Black')+' ran out of time, but '+(o==='w'?'White':'Black')+' cannot checkmate')}
-function afterMove(){let mover=game.turn()==='w'?'b':'w';H.moves++;if(timed()){let now=performance.now();H.clock[mover]-=now-H.last;H.last=now;if(H.clock[mover]<=0){H.clock[mover]=0;flag(mover);return}H.clock[mover]+=H.inc*1000}
+function afterMove(){let mover=game.turn()==='w'?'b':'w';H.moves++;if(timed()){let now=performance.now(),counted=!H.clockAfterFirst||game.history().length>2;if(counted)H.clock[mover]-=now-H.last;H.last=now;if(H.clock[mover]<=0){H.clock[mover]=0;if(authority()){flag(mover);return}}if(counted)H.clock[mover]+=H.inc*1000}
   H.fen=game.fen();H.offer=H.offer&&H.offer!==mover?null:H.offer;
   if(game.in_checkmate())return end(mover==='w'?'1-0':'0-1','checkmate');
   if(game.in_stalemate())return end('1/2-1/2','stalemate');
   if(game.insufficient_material())return end('1/2-1/2','dead position (neither side can checkmate)');
   if(repetitions()>=5)return end('1/2-1/2','fivefold repetition');
   if(timed()&&halfmoves()>=150)return end('1/2-1/2','75 moves without a capture or pawn move');
-  if(store.flip){flipped=game.turn()==='b';render()}draw();note((game.turn()==='w'?H.players.w+' (White)':H.players.b+' (Black)')+' to move'+(game.in_check()?' — check!':'.'))}
+  if(H.orient)flipped=H.orient==='b';else if(store.flip){flipped=game.turn()==='b';render()}draw();note((game.turn()==='w'?H.players.w+' (White)':H.players.b+' (Black)')+' to move'+(game.in_check()?' — check!':'.'))}
 function claimable(){if(!H||H.over)return null;if(repetitions()>=3)return 'threefold repetition';if(timed()&&halfmoves()>=100)return '50 moves without a capture or pawn move';if(!timed()&&halfmoves()>=200)return '100 moves without a capture or pawn move (clock-free rule)';return null}
-function end(result,reason){H.over=true;H.result=result;H.reason=reason;stopTick();let names=H.players,winner=result==='1-0'?names.w:result==='0-1'?names.b:null;
+function end(result,reason,force){if(!H||H.over)return;if(!authority()&&!force){draw();return}H.over=true;H.result=result;H.reason=reason;stopTick();let names=H.players,winner=result==='1-0'?names.w:result==='0-1'?names.b:null;
   let rec={date:new Date().toLocaleDateString('en-CA'),white:names.w,black:names.b,control:H.label,result,reason,revelation:H.revelation};
   if(H.revelation&&result==='1/2-1/2'){let cap=captured();let r=cap.w>cap.b?'1-0':'0-1';rec.decided=r;rec.capture=cap;winner=r==='1-0'?names.w:names.b;
     H.decided=r;H.reason=reason+'. Captured material: White '+cap.w+', Black '+cap.b+(cap.w===cap.b?' (equal, so Black wins)':'')}
   store.results.push(rec);store.results=store.results.slice(-30);persist();savePGN(rec);if(H.onEnd)try{H.onEnd(H,rec,game.history())}catch(e){}
   draw();if(!H.revelation&&result==='1/2-1/2'){note('Draw ('+reason+'). A Revelation game decides it: 1 minute each, colours by lot.');$('hs-revelation').hidden=false}
   else note(winner?winner+' wins'+(H.revelation?' the Revelation':'')+' ('+H.reason+').':'Draw ('+reason+').');try{if(window.chessMatoFeel)chessMatoFeel.sounds[winner?'mate':'move']()}catch(e){}}
-function savePGN(rec){if(!window.chessMatoGames)return;let h='[Event "CheckMato two-player'+(rec.revelation?' · Revelation':'')+'"]\n[Site "CheckMato (local)"]\n[Date "'+rec.date.replace(/-/g,'.')+'"]\n[UTCTime "'+new Date().toISOString().slice(11,19)+'"]\n[White "'+rec.white.replace(/"/g,"'")+'"]\n[Black "'+rec.black.replace(/"/g,"'")+'"]\n[Result "'+rec.result+'"]\n[TimeControl "'+(H.base?H.base+'+'+H.inc:'-')+'"]\n[Termination "'+rec.reason.replace(/"/g,"'")+'"]\n\n';
+function savePGN(rec){if(!window.chessMatoGames)return;let h='[Event "CheckMato two-player'+(rec.revelation?' · Revelation':'')+'"]\n[Site "'+(H.site||'CheckMato (local)')+'"]\n[Date "'+rec.date.replace(/-/g,'.')+'"]\n[UTCTime "'+new Date().toISOString().slice(11,19)+'"]\n[White "'+rec.white.replace(/"/g,"'")+'"]\n[Black "'+rec.black.replace(/"/g,"'")+'"]\n[Result "'+rec.result+'"]\n[TimeControl "'+(H.base?H.base+'+'+H.inc:'-')+'"]\n[Termination "'+rec.reason.replace(/"/g,"'")+'"]\n\n';
   try{chessMatoGames.importText(h+game.pgn().replace(/\[[^\]]*\]\s*/g,'')+' '+rec.result,'none')}catch(e){}}
 function revelation(){if(!H||!H.over)return;let a=H.players.w,b=H.players.b,swap=Math.random()<0.5,main={result:H.result,reason:H.reason};let w=swap?b:a,bl=swap?a:b;start(w,bl,'free',{revelation:true,mainResult:main});note('Revelation: by lot, '+w+' has White. 1 minute each.')}
 // Moves during a two-player game go through the normal path, then the clock and rules run.
-const priorPlay=play;play=function(...a){if(!H||H.over||game.fen()!==H.fen)return priorPlay(...a);if(H.paused){note('The game is paused. Press Resume first.');return}let before=game.history().length,r;H.moving=true;try{r=priorPlay(...a)}finally{if(H)H.moving=false}if(H&&game.history().length===before+1)afterMove();return r};
+const priorPlay=play;play=function(...a){if(!H||H.over||game.fen()!==H.fen)return priorPlay(...a);if(H.paused){note('The game is paused. Press Resume first.');return}let before=game.history().length,r;H.moving=true;try{r=priorPlay(...a)}finally{if(H)H.moving=false}if(H&&game.history().length===before+1){afterMove();if(H&&H.onMove)try{H.onMove(H)}catch(e){}}return r};
 const priorRender=render;render=function(...a){if(H&&!H.over&&!H.moving&&game.fen()!==H.fen){stopTick();H=null;setTimeout(draw)}let r=priorRender(...a);if(H)placeClocks();return r};
 // ---- UI: Play → Two players ----
 const panel=$('panel-play-hotseat');
@@ -74,5 +79,9 @@ if(panel){panel.innerHTML='<h2>Two players</h2><p class="muted">Play a friend on
  $('hs-pause').onclick=()=>{if(!H)return;H.paused=!H.paused;H.last=performance.now();draw()};
  $('hs-revelation').onclick=revelation;$('hs-new').onclick=()=>{stopTick();H=null;draw()};draw()}
 const style=document.createElement('style');style.textContent='.hs-clock{font:600 18px ui-monospace,monospace;padding:8px 12px;border:1px solid var(--stroke,#3a4a40);border-radius:6px;margin:6px 0;background:#18211d;color:#ecf0e9}.hs-clock.active{border-color:#9cc8f2;box-shadow:0 0 0 2px #9cc8f2}.hs-clock.low{color:#ffb4a8}#hs-setup input{width:140px}#panel-play-hotseat .row label{display:flex;gap:6px;align-items:center}#panel-play-hotseat .setting-check{display:flex;gap:8px;align-items:center;margin:0}.hs-clock[hidden]{display:none}';document.head.append(style);
-window.chessMatoHotseat={start,get:()=>H,end,claimable,captured,revelation,canMate,store:()=>store,flag};
+// Live play: put the position on the board from a move list without running clocks or rules for those moves.
+function sync(sans,clock){if(!H)return;H.moving=true;try{let h=game.history(),same=h.length<=sans.length&&h.every((s,i)=>s===sans[i]);if(!same){game.reset();h=[]}for(let i=h.length;i<sans.length;i++)if(!game.move(sans[i]))break}finally{H.moving=false}
+  H.fen=game.fen();H.moves=game.history().length;if(clock){H.clock.w=clock.w;H.clock.b=clock.b;H.last=performance.now()}if(H.orient)flipped=H.orient==='b';selected=hover=null;render();draw()}
+function stop(){stopTick();H=null;draw();render()}
+window.chessMatoHotseat={start,get:()=>H,end,sync,stop,controls:CONTROLS,timed,claimable,captured,revelation,canMate,store:()=>store,flag};
 })();
