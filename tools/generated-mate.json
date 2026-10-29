@@ -115,5 +115,78 @@
   "rating": 950,
   "eval": "mate 1",
   "ply": 12
+ },
+ {
+  "fen": "8/p3qp1k/Rn3r1p/8/4P3/1Q1P4/3R3p/7K b - - 5 45",
+  "line": [
+   "Rf1+",
+   "Kxh2",
+   "Qh4+",
+   "Kg2",
+   "Qh1+",
+   "Kg3",
+   "Rf3+",
+   "Kg4",
+   "Qh3#"
+  ],
+  "themes": [
+   "mate",
+   "mate in 5",
+   "check",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "The line forces checkmate in 5."
+  ],
+  "rating": 1750,
+  "eval": "mate 5",
+  "ply": 89
+ },
+ {
+  "fen": "2k5/6R1/3p2p1/1b2np1p/2p1p3/4P1P1/1B2KP1n/3B4 b - - 15 53",
+  "line": [
+   "c3+",
+   "Ke1",
+   "Nd3+",
+   "Ke2",
+   "Nf4+",
+   "Ke1",
+   "Ng2#"
+  ],
+  "themes": [
+   "mate",
+   "mate in 4",
+   "knight",
+   "check",
+   "discovered attack",
+   "pawn",
+   "tactics"
+  ],
+  "why": [
+   "The line forces checkmate in 4.",
+   "Moving the pawn uncovers an attack by the bishop on b5 against the king."
+  ],
+  "rating": 1850,
+  "eval": "mate 4",
+  "ply": 105
+ },
+ {
+  "fen": "r1bqkb1r/pp2np2/2np2p1/2PN3p/2P5/P3B2P/5PPN/2RQKB1R w kq - 1 16",
+  "line": [
+   "Nf6#"
+  ],
+  "themes": [
+   "mate",
+   "mate in 1",
+   "knight",
+   "tactics"
+  ],
+  "why": [
+   "Nf6# is checkmate."
+  ],
+  "rating": 550,
+  "eval": "mate 1",
+  "ply": 30
  }
 ]
