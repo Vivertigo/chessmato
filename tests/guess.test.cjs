@@ -6,7 +6,7 @@ let failures=0,passes=0;function ok(c,m){if(c){passes++;console.log('  ok  '+m)}
 await page.goto(BASE);await page.waitForFunction(()=>window.chessMatoGuess);
 const click=async(a,b)=>{await page.click(`#board [data-s="${a}"]`);await page.click(`#board [data-s="${b}"]`)};
 const waitTurn=()=>page.waitForFunction(()=>{let G=chessMatoGuess.get();return G&&(G.finished||(!G.busy&&game.turn()===G.side))},null,{timeout:30000});
-ok(await page.evaluate(()=>chessMatoGuess.classics.length===5&&chessMatoGuess.classics.every(g=>{let c=new Chess();g.sans.forEach(s=>c.move(s));return c.in_checkmate()})),'5 classic games bundled, each verified to end in checkmate');
+ok(await page.evaluate(()=>chessMatoGuess.classics.length===9&&chessMatoGuess.classics.filter(g=>g.mate!==false).length===5&&chessMatoGuess.classics.filter(g=>g.mate!==false).every(g=>{let c=new Chess();g.sans.forEach(s=>c.move(s));return c.in_checkmate()})),'9 classic games bundled; the 5 mating games are verified to end in checkmate');
 await page.evaluate(()=>chessUITest.navigate('play','guess'));ok(await page.evaluate(()=>!$('panel-play-guess').hidden&&$('guess-game').options.length>=5&&$('guess-side').value==='w'),'Play → Guess the move lists the games; side defaults to the winner');
 await page.selectOption('#guess-game','reti');await page.click('#guess-start');await waitTurn();
 ok(await page.evaluate(()=>game.history().length===0&&chessMatoGuess.get().side==='w'),'game starts at the initial position with you to move');

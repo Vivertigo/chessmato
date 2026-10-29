@@ -46,7 +46,7 @@ function progressed(){let p=R.plan;if(!p||p.date!==today())return;let changed=fa
 const priorComplete=complete;complete=function(...a){let d=current,wasMissed=d&&missed(d),wasDue=d&&data.progress[d.id]&&data.progress[d.id].due<=Date.now(),r=priorComplete(...a);
   try{let p=plan();for(let t of p.tasks){if(t.kind!=='puzzles'||t.done>=t.goal||!d)continue;if(t.filter==='missed'?wasMissed:t.filter==='due'?wasDue:d.tags.includes(t.filter)){t.done++;break}}persist();draw()}catch(e){}return r};
 function start(t){if(t.kind==='puzzles'){let d=pickPuzzle(t.filter);if(!d){note('No matching puzzle right now. Import more in Puzzles → Puzzle library or My games.');return}chessUITest.navigate('puzzles','solve');load(d);note('Daily plan: '+t.label+'.')}
-  else if(t.kind==='opening'){chessUITest.navigate('openings','practice');let r=O().repertoire.find(r=>r.id===t.id);if(r){$('opening-side').value=r.side;$('opening-side').dispatchEvent(new Event('change'))}O().startOpening(t.id)}
+  else if(t.kind==='opening'){chessUITest.navigate('openings','practice');let r=O().repertoire.find(r=>r.id===t.id);if(r){$('opening-side').value=r.set||r.side;$('opening-side').dispatchEvent(new Event('change'))}O().startOpening(t.id)}
   else if(t.kind==='mini'){chessUITest.navigate('minigames','round');$('minitype').value=t.type;$('startmini').click()}}
 // ---- UI ----
 const planPanel=$('panel-coach-plan');

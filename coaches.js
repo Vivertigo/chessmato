@@ -62,7 +62,7 @@ function nextFocus(){let t=trainingSummary(),items=[];
 const intents=[
  ['position',/(position|board|check (this|it|my)|blunder|safe|danger|hanging|undefended|threat|what.*(attack|happen)|scan|before i move)/],
  ['focus',/(work on|focus|improve|practice|train|plan|next|weak|priority)/],
- ['opening',/(opening|repertoire|italian|caro|slav|london|e4|d4)/],
+ ['opening',/(opening|repertoire|italian|caro|slav|london|e4|d4|king'?s indian|\bkia\b|\bkid\b|pirc|hippo|modern|blitz)/],
  ['resign',/(resign|give up|lost|losing|hopeless|quit)/],
  ['progress',/(rating|progress|kudos|stats|how am i|doing)/],
  ['endgame',/(endgame|ending|promot|king and pawn)/],
@@ -79,7 +79,7 @@ function factsFor(intent){
   switch(intent){
   case 'position':return positionReport().facts;
   case 'focus':return nextFocus();
-  case 'opening':{let st=coachStats(),last=st.sessions.slice(-1)[0];return ['Your repertoire: White plays an Italian-based 1.e4; Black plays the Caro-Kann against 1.e4 and the Slav against d4/c4.',t.sessions?'Completed opening sessions: '+t.sessions+(t.recall!==null?', first-choice recall '+t.recall+'%':'')+'.':'No opening sessions completed yet.',last?'Last session: '+last.name+'.':'Start with Openings → Practice → Recommended line.','Aim to understand why each move is played, not just memorize the order.']}
+  case 'opening':{let st=coachStats(),last=st.sessions.slice(-1)[0];return ['Your repertoire: White plays an Italian-based 1.e4; Black plays the Caro-Kann against 1.e4 and the Slav against d4/c4.','For blitz, switch to the systems in Openings → Practice: the King\'s Indian Attack or the London as White, the King\'s Indian with the Pirc or the Hippo as Black. One setup against almost everything means fewer decisions in the opening and more time on your clock for the middlegame.',t.sessions?'Completed opening sessions: '+t.sessions+(t.recall!==null?', first-choice recall '+t.recall+'%':'')+'.':'No opening sessions completed yet.',last?'Last session: '+last.name+'.':'Start with Openings → Practice → Recommended line.','Aim to understand why each move is played, not just memorize the order.']}
   case 'resign':{let g=game,m=material(g),me=mySide(g),d=m[me]-m[other(me)];return ['Current material: '+(d===0?'level':(d>0?'up ':'down ')+Math.abs(d))+'.','Many positions that feel lost still have defensive chances, especially in endgames, and endgames are your strongest phase.','In a bot game, the Resign button opens a review first: material, the engine estimate, and the choice to keep playing. Resigned positions are saved under Player profile → Resignation review, where you can play on from them.']}
   case 'progress':return ['Training rating: '+t.rating+' (editable, not official Elo).',t.kudos!==null?'Recent Kudos average over '+Math.min(40,t.moves)+' scored moves: '+t.kudos.toFixed(1)+'%.':'No bot moves scored yet.','Clean puzzle solves: '+t.clean+'.',t.mistakes.length?'Recent notebook entries: '+t.mistakes.join(' | '):'Mistake notebook is empty.']
   case 'endgame':return [PERSONAL.endgameReply||'Endgames reward patience. Keep them sharp with occasional practice alongside openings and the middlegame.','Key habits: activate the king, push passed pawns with support, and check stalemate before you promote.']
