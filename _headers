@@ -2,7 +2,7 @@
 /*
   X-Content-Type-Options: nosniff
   Referrer-Policy: no-referrer
-  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Permissions-Policy: camera=(self), microphone=(), geolocation=()
 
 # The service worker and the page itself must always be revalidated so updates reach installed apps.
 /sw.js

@@ -31,13 +31,13 @@ Puzzle bands are rough teaching estimates. The starter collection is beginner-le
 Analysis mode has no automatic opponent and does not score moves.
 
 ## Hosting as a website
-CheckMato is a plain static site with no build step. On Cloudflare Pages, connect the GitHub repo and use:
-- Framework preset: None
-- Build command: (leave empty)
-- Build output directory: `/`
-- Root directory: (leave empty)
+CheckMato is a plain static site with no build step, and every path in it is relative, so it runs from a sub-folder.
 
-`_headers` sets the security and caching headers (the page and service worker always revalidate, so updates reach installed apps), and `404.html` stops missing files from being answered with the app page. Progress is saved in each visitor's own browser; nothing is sent to the server. The optional `personal-data.js` is never deployed, because it is gitignored.
+**GitHub Pages** (the default, at `https://vivertigo.github.io/checkmato/`): in the repository go to Settings → Pages, set Source to "Deploy from a branch", Branch to `main` and folder to `/ (root)`, then Save. The site appears a minute or two later. `.nojekyll` makes Pages serve every file as it is, and `404.html` sends missing paths back to the app.
+
+**Cloudflare Pages** (alternative): connect the repo with framework preset None, an empty build command and output directory `/`. `_headers` then sets security and caching headers.
+
+Progress is saved in each visitor's own browser; nothing is sent to the server. The optional `personal-data.js` is never deployed, because it is gitignored. Installed copies update themselves: the service worker refreshes files in the background.
 
 ## Persistence and backup
 Browser storage saves your progress when available. File pages and the localhost app use different browser storage. Export/import the drill backup AND the separate arena-progress backup when moving between them. Clearing browser storage deletes local progress.
@@ -78,7 +78,7 @@ A legal puzzle answer outside the supplied solution ends as a miss (-3 points on
 Correct solutions show a win (or solved-with-help) explanation. Both wins and misses wait for Okay before moving on. There are no countdowns or chess clocks.
 
 ## Local-only Android direction
-No hosted service is required or planned. The current PC engine uses a localhost-only server, not public hosting. A future Android build can package the app and engine as an offline APK. Hotseat can be offline; Bluetooth/Wi-Fi Direct requires additional native implementation. Android packaging and multiplayer are not implemented yet.
+No server-side service is needed: the app runs from the local launcher, from any static host (see Hosting), or installed offline. Two players on one device and Two phones (move codes) already work offline. A future Android build can package the app and engine as an APK and add Bluetooth play; that native part is not implemented yet.
 
 ## Additional browser verification
 Passed actual click tests for all guide stages, original-position immutability, White and Black opening startup, full opening completion, deviation/retry, profile accounting, puzzle miss/win confirmation, zero premature advance, guide toggles, real Stockfish hints, no points from assisted moves, and stale-hint removal.
@@ -110,4 +110,4 @@ Use Start CheckMato.cmd (or the original launcher) for local bot games. Storage 
 - **Two phones** (Play tab): play a friend on another phone or computer with no internet. Each move travels as a short code (about one character per move) that you scan as a QR code, share (Bluetooth, Nearby Share, messages), save as a file or paste. Every code carries the whole game and is checked move by move, so a missed or old code never breaks anything. Draw offers, claims and resignations travel the same way; a drawn game goes to a Revelation played on one phone, whose result code goes back to the other. When CheckMato is hosted, the phone's own camera app can open the QR code straight into the game. Clock-free; finished games go to My games.
 - **Blitz systems** (Openings tab): setups that work against almost anything, for fast games. White: King's Indian Attack (1.Nf3, g3, Bg2, d3, e4) or the London (1.d4, Bf4). Black: King's Indian Defense with the Pirc against 1.e4, or the Hippo. 23 drillable lines (each set keeps your moves consistent, so mixed drills work), cards with pawn breaks, plans and patterns, and four King's Indian master games for Guess the move (Fischer–Myagmarsuren 1967, Fischer–Sherwin 1957, Bagirov–Gufeld 1973, Cochrane–Mohishunder 1851). Drills stay untimed.
 - **Hikaru Nakamura's games** (Openings → Blitz systems, Guess the move, Puzzles): 40 of his wins in these systems as model games (each linked to the repertoire line it reaches, and shown under that line in Openings → Practice), plus 130 key-moment puzzles from 326 of his wins, where the move he played was the engine's clearly unique winner. Mostly blitz and rapid games.
-- Tests: `CHESSMATO_NO_BROWSER=1 node server.cjs`, then `node tests/<name>.test.cjs` (requires Playwright). Suites: appearance, core, coaches, variety, roadmap, thinking, pgn, lichess, review, guess, pwa, feel, tour, hotseat, link, systems, nakamura, a11y.
+- Tests: `CHESSMATO_NO_BROWSER=1 node server.cjs`, then `node tests/<name>.test.cjs` (requires Playwright). Suites: appearance, core, coaches, variety, roadmap, thinking, pgn, lichess, review, guess, pwa, feel, tour, hotseat, link, systems, nakamura, pages, a11y.
