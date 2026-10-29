@@ -23,7 +23,7 @@ function captured(){let s={w:0,b:0};for(let m of game.history({verbose:true}))if
 const fmt=ms=>{ms=Math.max(0,ms);let s=Math.ceil(ms/1000);if(ms<10000&&ms>0)return (ms/1000).toFixed(1);return Math.floor(s/60)+':'+String(s%60).padStart(2,'0')};
 function start(white,black,control,opts={}){stopTick();let c=ctl(control),rev=!!opts.revelation;
   $('mode').value='free';$('mode').dispatchEvent(new Event('change'));if(window.chessUITest)chessUITest.navigate('play','hotseat');game.reset();baseFen=game.fen();selected=hover=null;flipped=false;
-  H={players:{w:white,b:black},control:rev?'revelation':c[0],label:rev?'Revelation · 1 minute each':c[1],base:rev?60:c[2],inc:rev?0:c[3],clock:{w:(rev?60:c[2])*1000,b:(rev?60:c[2])*1000},fen:game.fen(),startFen:game.fen(),over:false,revelation:rev,mainResult:opts.mainResult||null,offer:null,paused:false,last:performance.now(),moves:0};
+  H={players:{w:white,b:black},control:rev?'revelation':c[0],label:rev?'Revelation · 1 minute each':c[1],base:rev?60:c[2],inc:rev?0:c[3],clock:{w:(rev?60:c[2])*1000,b:(rev?60:c[2])*1000},fen:game.fen(),startFen:game.fen(),over:false,revelation:rev,mainResult:opts.mainResult||null,offer:null,paused:false,last:performance.now(),moves:0,onEnd:opts.onEnd||null};
   $('title').textContent=(rev?'Revelation: ':'')+white+' vs '+black;$('description').textContent=H.label+(rev?' · if drawn, captured material decides; equal = Black wins':'');
   render();if(timed())startTick();draw();note(white+' (White) to move.')}
 function startTick(){stopTick();H.last=performance.now();tick=setInterval(()=>{if(!H||H.over||H.paused)return;let now=performance.now(),t=game.turn();H.clock[t]-=now-H.last;H.last=now;if(H.clock[t]<=0){H.clock[t]=0;flag(t)}drawClocks()},100)}
@@ -42,7 +42,7 @@ function end(result,reason){H.over=true;H.result=result;H.reason=reason;stopTick
   let rec={date:new Date().toLocaleDateString('en-CA'),white:names.w,black:names.b,control:H.label,result,reason,revelation:H.revelation};
   if(H.revelation&&result==='1/2-1/2'){let cap=captured();let r=cap.w>cap.b?'1-0':'0-1';rec.decided=r;rec.capture=cap;winner=r==='1-0'?names.w:names.b;
     H.decided=r;H.reason=reason+'. Captured material: White '+cap.w+', Black '+cap.b+(cap.w===cap.b?' (equal, so Black wins)':'')}
-  store.results.push(rec);store.results=store.results.slice(-30);persist();savePGN(rec);
+  store.results.push(rec);store.results=store.results.slice(-30);persist();savePGN(rec);if(H.onEnd)try{H.onEnd(H,rec,game.history())}catch(e){}
   draw();if(!H.revelation&&result==='1/2-1/2'){note('Draw ('+reason+'). A Revelation game decides it: 1 minute each, colours by lot.');$('hs-revelation').hidden=false}
   else note(winner?winner+' wins'+(H.revelation?' the Revelation':'')+' ('+H.reason+').':'Draw ('+reason+').');try{if(window.chessMatoFeel)chessMatoFeel.sounds[winner?'mate':'move']()}catch(e){}}
 function savePGN(rec){if(!window.chessMatoGames)return;let h='[Event "CheckMato two-player'+(rec.revelation?' · Revelation':'')+'"]\n[Site "CheckMato (local)"]\n[Date "'+rec.date.replace(/-/g,'.')+'"]\n[UTCTime "'+new Date().toISOString().slice(11,19)+'"]\n[White "'+rec.white.replace(/"/g,"'")+'"]\n[Black "'+rec.black.replace(/"/g,"'")+'"]\n[Result "'+rec.result+'"]\n[TimeControl "'+(H.base?H.base+'+'+H.inc:'-')+'"]\n[Termination "'+rec.reason.replace(/"/g,"'")+'"]\n\n';
