@@ -10,7 +10,7 @@ const context=document.createElement('div');context.className='board-context';co
 const logDetails=document.createElement('details');logDetails.className='move-list';logDetails.innerHTML='<summary>Move list</summary>';logDetails.append($('log'));board.append(logDetails);
 const fenDetails=$('fen').closest('details'),legend=board.querySelector('.notice'),boardSettings=$('all').closest('.row'),puzzleActions=$('hint').closest('.row');
 document.querySelector('title').textContent='CheckMato · Gary Bendt';top.querySelector('h1').textContent='CheckMato';const views=[
-{id:'play',title:'Play',group:'Practice',subtitle:'A focused board, your bot, and feedback on your moves.',board:true,sections:[['game','Game setup'],['feedback','Move feedback'],['guess','Guess the move']]},
+{id:'play',title:'Play',group:'Practice',subtitle:'A focused board, your bot, and feedback on your moves.',board:true,sections:[['game','Game setup'],['feedback','Move feedback'],['hotseat','Two players'],['guess','Guess the move']]},
 {id:'openings',title:'Openings',group:'Practice',subtitle:'Build a reliable start. Learn the idea behind each move.',board:true,sections:[['practice','Practice'],['repertoire','Your repertoire']]},
 {id:'puzzles',title:'Puzzles',group:'Practice',subtitle:'Find the forcing move, understand the result, then continue.',board:true,sections:[['solve','Solve'],['queue','Practice queue'],['library','Puzzle library']]},
 {id:'minigames',title:'Minigames',group:'Practice',subtitle:'Build board vision one untimed question at a time.',board:true,sections:[['round','Play a round'],['guide','Game guide']]},
