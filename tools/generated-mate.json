@@ -75,5 +75,45 @@
   "rating": 1850,
   "eval": "mate 4",
   "ply": 64
+ },
+ {
+  "fen": "2n4k/1Q5p/5bP1/5pq1/8/2p2P2/5R2/2r2N1K w - - 2 43",
+  "line": [
+   "Qxh7#"
+  ],
+  "themes": [
+   "mate",
+   "mate in 1",
+   "capture",
+   "queen",
+   "tactics"
+  ],
+  "why": [
+   "Qxh7# is checkmate."
+  ],
+  "rating": 550,
+  "eval": "mate 1",
+  "ply": 84
+ },
+ {
+  "fen": "r1bqkb1r/ppp2ppp/2n5/3pp1N1/2B1P1n1/5Q2/PPPP1PPP/RNB2RK1 w kq - 2 7",
+  "line": [
+   "Qxf7#"
+  ],
+  "themes": [
+   "mate",
+   "mate in 1",
+   "capture",
+   "fork",
+   "queen",
+   "tactics"
+  ],
+  "why": [
+   "Qxf7# is checkmate.",
+   "After Qxf7# the queen attacks the bishop on f8 and the king on e8 at once."
+  ],
+  "rating": 950,
+  "eval": "mate 1",
+  "ply": 12
  }
 ]
