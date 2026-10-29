@@ -102,7 +102,7 @@ try{data.drills=validate(data.drills);load(data.drills[0]);$('matched').textCont
 function paintPreview(){let src=selected||hover,ms=src?options(src):[];document.querySelectorAll('#board .sq').forEach(b=>{let s=b.dataset.s,m=ms.find(m=>m.to===s);b.classList.toggle('selected',s===src);b.classList.remove('marked','danger','unattacked');if(m)b.classList.add('marked',after(m).length?'danger':'unattacked')})}
 window.workshopTest={attackers,validate,starter,Chess};
 </script>
-<script src="academy.js"></script><script src="openings.js"></script><script src="ui.js"></script><script src="appearance.js"></script><script src="coaches.js"></script><script src="puzzle-pack.js"></script><script src="puzzles.js"></script><script src="training.js"></script><script src="thinking.js"></script></html>
+<script src="academy.js"></script><script src="openings.js"></script><script src="ui.js"></script><script src="appearance.js"></script><script src="coaches.js"></script><script src="puzzle-pack.js"></script><script src="puzzles.js"></script><script src="training.js"></script><script src="thinking.js"></script><script src="openings-db.js"></script><script src="pgn.js"></script></html>
 
 
 

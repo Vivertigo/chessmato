@@ -211,5 +211,92 @@
   "rating": 850,
   "eval": "mate 2",
   "ply": 74
+ },
+ {
+  "fen": "2bk3r/3r1ppp/p1Q5/1p2p3/1b2Pn1P/5PK1/PPP3PR/RN3B2 b - - 2 20",
+  "line": [
+   "Be1+",
+   "Kg4",
+   "Rc7+",
+   "Kg5",
+   "Rxc6"
+  ],
+  "themes": [
+   "check",
+   "pin",
+   "bishop",
+   "tactics"
+  ],
+  "why": [
+   "Be1+ pins the king on g3 to the pawn on h4."
+  ],
+  "rating": 1550,
+  "eval": "mate 4",
+  "ply": 39
+ },
+ {
+  "fen": "8/kP2r1pp/p1K2p1P/5P2/1R6/8/3r4/8 w - - 7 53",
+  "line": [
+   "b8=Q#"
+  ],
+  "themes": [
+   "mate",
+   "mate in 1",
+   "promotion",
+   "pawn",
+   "tactics"
+  ],
+  "why": [
+   "b8=Q# is checkmate.",
+   "The passed pawn promotes."
+  ],
+  "rating": 550,
+  "eval": "mate 1",
+  "ply": 104
+ },
+ {
+  "fen": "r1b2knr/pp1p4/2n3Bp/4p1P1/1b6/2NN1P1R/PPPB2p1/R2QK3 b Q - 1 17",
+  "line": [
+   "g1=Q+",
+   "Ke2",
+   "Nd4#"
+  ],
+  "themes": [
+   "mate",
+   "mate in 2",
+   "knight",
+   "promotion",
+   "check",
+   "pin",
+   "pawn",
+   "tactics"
+  ],
+  "why": [
+   "The line forces checkmate in 2.",
+   "The passed pawn promotes.",
+   "g1=Q+ pins the king on e1 to the queen on d1."
+  ],
+  "rating": 1250,
+  "eval": "mate 2",
+  "ply": 33
+ },
+ {
+  "fen": "7k/5p1p/2B2p2/p1Q1p3/4P3/P1p2q2/7K/8 w - - 8 42",
+  "line": [
+   "Qf8#"
+  ],
+  "themes": [
+   "mate",
+   "mate in 1",
+   "back rank",
+   "queen",
+   "tactics"
+  ],
+  "why": [
+   "Qf8# is checkmate."
+  ],
+  "rating": 550,
+  "eval": "mate 1",
+  "ply": 82
  }
 ]

@@ -136,7 +136,7 @@ Do not claim expanded variety is already implemented.
 - New storage key: chessmato-coach-chats-v1. academyCoach gained botSide().
 
 ### Planned, NOT implemented
-- PGN import/export that builds a player's profile with the local engine.
+- (Done later the same day, see below) PGN import/export that builds a player's profile with the local engine.
 - Multiple local profiles; device-to-device sharing preferably over Bluetooth, file export as fallback. No server/account/cloud.
 - Possible future full website: keep ChessMato a plain static site (no backend, in-browser engine, local storage, PWA/offline) so hosting stays a drop-in. Not built.
 - Future online mode (planned, NOT built): online profiles are completely separate from local ones. The server is the only writer of online stats; the client submits only moves/answers for server-issued games and puzzles and never uploads local stats or files. One-way download from online to local is allowed. It needs bot/engine-assistance detection. Online accounts cannot set their own difficulty: there are 3 complete placement games (vs players or bots), starting near 1500, and the server sets the Elo. The local editable training rating stays as is. Keep local storage from ever becoming an online data source.
@@ -158,3 +158,21 @@ Do not claim expanded variety is already implemented.
 - Norway Chess-style deciders (decided, NOT built): always on, with no toggle. Any game against a person that ends in a draw (forced draws included) is followed by an Armageddon game: White gets more time, and a draw counts as a win for Black. Clock-free Armageddon keeps draw = Black wins, with no clock. How colors are chosen (lot or bidding) is still to be proposed. Use 3-1-0 scoring if leagues are added.
   - Update: the Armageddon decider (possibly named "Revelation") is always a 1-minute game, in every mode including clock-free. Draw = Black wins. Whether White gets extra time is unspecified.
   - Update: Revelation has equal time for both sides (no draw-odds). Checkmate, resignation and flag decide normally. If it ends drawn, the winner is whoever captured more material (P1 N3 B3 R5 Q9). If the capture scores are equal, Black wins.
+
+## Update 2026-10-29 evening: PGN first, then public-domain libraries (owner's new order)
+### Done and tested (tests/pgn.test.cjs, 28 checks; all other suites still pass)
+- pgn.js, Player profile → My games, key `chessmato-games-v1`:
+  - Multi-game PGN import (paste or files). Comments, clocks, variations and NAGs are stripped. Bad games are skipped with the illegal move named. Duplicates are ignored.
+  - Your side is found by username or chosen manually.
+  - Results and endings: Termination headers are read, and "Normal" without mate is inferred as resignation.
+  - Opening names come from the Lichess openings list. Repertoire departure (you vs. your opponent) is detected.
+  - Export one game or all of them as .pgn, including FEN/SetUp for games started from a position.
+- Local-engine review (Stockfish, depth 9, per game or all unreviewed): Kudos per phase, blunders/mistakes, and biggest swings.
+  - Missed forcing moves (mate, check, capture where the engine's best move lost ≥150 cp) become 'pgn-…' puzzles from the exact FEN, tagged "from your games".
+  - Resigned losses go to the Resignation review with their source (new chessMatoTraining.addResign).
+- Finished ChessMato bot games are saved automatically as PGN games (chained on chessMatoOnGameEnd).
+- Settings → Backups → "Back up everything / Restore everything": one JSON file with every ChessMato localStorage key. It is validated before replacing anything, and the user confirms first.
+- openings-db.js: 3,865 named lines from lichess-org/chess-openings (CC0). vendor/fzstd.js: fzstd 0.1.1 (MIT).
+### Next (not built yet)
+- In-app Lichess puzzle importer. database.lichess.org is blocked from the build machine, so the user downloads lichess_db_puzzle.csv.zst (CC0) once and ChessMato filters it offline (fzstd stream, theme/rating sampling, opponent's first move applied, chess.js validation, key `chessmato-lichess-v1`). The existing 179 puzzles stay.
+- Show opening names in the opening trainer and Analysis.

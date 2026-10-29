@@ -30,6 +30,7 @@ Analysis mode has no automatic opponent and does not score moves.
 Browser storage saves your progress when available. File pages and the localhost app use different browser storage. Export/import the drill backup AND the separate arena-progress backup when moving between them. Clearing browser storage deletes local progress.
 Drill backup restores the drill collection/history; arena backup restores the rating, badges, lesson completion, activities, and Kudos history.
 Downloads go to the location selected by your browser.
+**Simplest:** Settings → Backups → "Back up everything" saves rating, puzzles, openings, profile, games, chats and settings in one .json file; "Restore everything" loads it in another browser or device.
 
 ## Verification
 Actual headless Edge tests covered mouse hover → click piece → click destination, preview immutability, puzzle completion/Okay advance, all five minigame startups, rating changes, and a real Stockfish reply with Kudos scoring.
@@ -41,6 +42,8 @@ chess.js 0.10.3: BSD-2-Clause, LICENSE-chess.txt.
 Stockfish.js 10.0.2: GPLv3, LICENSE-stockfish.txt.
 Exact engine package and corresponding source: https://www.npmjs.com/package/stockfish/v/10.0.2
 Upstream: https://github.com/nmrugg/stockfish.js
+Opening names: lichess-org/chess-openings, CC0 public domain (openings-db.js, built by tools/build-openings.cjs).
+fzstd 0.1.1 (Zstandard decoder for the planned Lichess puzzle importer): MIT, vendor/LICENSE-fzstd.txt.
 Engine JS and WASM are vendored locally; no API keys or paid services are used. Review upstream source/license terms before redistributing.
 
 ## Personalized opening coach (first feature)
@@ -79,4 +82,5 @@ Use Start ChessMato.cmd (or the original launcher) for local bot games. Storage 
 - **Openings**: Mixed mode, where the opponent varies its replies within your repertoire.
 - **Bot games**: an optional blunder check before each move (warns, never blocks), a checks/captures/threats panel, a resignation review before resigning, and practice play-on from saved resignations.
 - **Player profile**: structured strengths and priorities, Measured progress, and Resignation review.
-- Tests: `CHESSMATO_NO_BROWSER=1 node server.cjs`, then `node tests/<name>.test.cjs` (requires Playwright).
+- **My games** (Player profile): import PGN text or .pgn files from Lichess, Chess.com or anywhere, with your side found by username. It shows results, how games ended (Lichess "Normal" without mate counts as resignation), the opening name (from the Lichess list), and where you or your opponent left your repertoire. The optional local-engine review gives Kudos by phase, blunders and biggest swings. Missed forcing moves (mates, checks, captures) become personal puzzles from the exact game position, and resigned losses go to the Resignation review. Finished ChessMato bot games are saved automatically. You can export one game or all of them as .pgn.
+- Tests: `CHESSMATO_NO_BROWSER=1 node server.cjs`, then `node tests/<name>.test.cjs` (requires Playwright). Suites: appearance, core, coaches, variety, roadmap, thinking, pgn.
