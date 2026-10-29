@@ -2,7 +2,7 @@
 const {chromium}=require('playwright');
 const BASE=process.env.CHESSMATO_URL||'http://127.0.0.1:8767/';
 let failures=0,passes=0;function ok(c,m){if(c){passes++;console.log('  ok  '+m)}else{failures++;console.log('  FAIL '+m)}}
-(async()=>{const browser=await chromium.launch();const page=await (await browser.newContext({viewport:{width:1300,height:950}})).newPage();const errors=[];page.addInitScript(()=>{try{if(!sessionStorage.getItem('thinking-test'))localStorage.setItem('chessmato-thinking-v1','off')}catch(e){}});page.on('pageerror',e=>errors.push(e.message));
+(async()=>{const browser=await chromium.launch();const page=await (await browser.newContext({viewport:{width:1300,height:950}})).newPage();const errors=[];page.addInitScript(()=>{try{if(!sessionStorage.getItem('thinking-test'))localStorage.setItem('chessmato-thinking-v1','off')}catch(e){}try{localStorage.setItem('chessmato-tour-v1','done')}catch(e){}});page.on('pageerror',e=>errors.push(e.message));
 await page.goto(BASE);await page.waitForFunction(()=>window.chessMatoGuess);
 const click=async(a,b)=>{await page.click(`#board [data-s="${a}"]`);await page.click(`#board [data-s="${b}"]`)};
 const waitTurn=()=>page.waitForFunction(()=>{let G=chessMatoGuess.get();return G&&(G.finished||(!G.busy&&game.turn()===G.side))},null,{timeout:30000});

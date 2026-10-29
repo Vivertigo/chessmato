@@ -36,7 +36,7 @@ const MISSED=`[Event "Missed mate"]
 
 1. e4 e5 2. Qh5 Nc6 3. Bc4 Nf6 4. Qe2 Bc5 *
 `;
-(async()=>{const browser=await chromium.launch();const ctx=await browser.newContext({viewport:{width:1300,height:950},acceptDownloads:true});const page=await ctx.newPage();const errors=[];page.addInitScript(()=>{try{if(!sessionStorage.getItem('thinking-test'))localStorage.setItem('chessmato-thinking-v1','off')}catch(e){}});page.on('pageerror',e=>errors.push(e.message));page.on('dialog',d=>d.accept());
+(async()=>{const browser=await chromium.launch();const ctx=await browser.newContext({viewport:{width:1300,height:950},acceptDownloads:true});const page=await ctx.newPage();const errors=[];page.addInitScript(()=>{try{if(!sessionStorage.getItem('thinking-test'))localStorage.setItem('chessmato-thinking-v1','off')}catch(e){}try{localStorage.setItem('chessmato-tour-v1','done')}catch(e){}});page.on('pageerror',e=>errors.push(e.message));page.on('dialog',d=>d.accept());
 await page.goto(BASE);await page.waitForFunction(()=>window.chessMatoGames);
 console.log('Import');
 await page.evaluate(()=>chessUITest.navigate('profile','games'));

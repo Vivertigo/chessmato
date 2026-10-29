@@ -2,7 +2,7 @@
 const {chromium}=require('playwright');
 const BASE=process.env.CHESSMATO_URL||'http://127.0.0.1:8767/';
 let failures=0,passes=0;function ok(c,m){if(c){passes++;console.log('  ok  '+m)}else{failures++;console.log('  FAIL '+m)}}
-(async()=>{const browser=await chromium.launch();const ctx=await browser.newContext({viewport:{width:1300,height:950}});const page=await ctx.newPage();const errors=[];page.addInitScript(()=>{try{if(!sessionStorage.getItem('thinking-test'))localStorage.setItem('chessmato-thinking-v1','off')}catch(e){}});page.on('pageerror',e=>errors.push(e.message));
+(async()=>{const browser=await chromium.launch();const ctx=await browser.newContext({viewport:{width:1300,height:950}});const page=await ctx.newPage();const errors=[];page.addInitScript(()=>{try{if(!sessionStorage.getItem('thinking-test'))localStorage.setItem('chessmato-thinking-v1','off')}catch(e){}try{localStorage.setItem('chessmato-tour-v1','done')}catch(e){}});page.on('pageerror',e=>errors.push(e.message));
 await page.goto(BASE);await page.waitForFunction(()=>window.chessMatoAppearance);
 console.log('Rules');
 let r=await page.evaluate(()=>{const C=workshopTest.Chess;function perft(c,d){if(!d)return 1;let n=0;for(let m of c.moves()){c.move(m);n+=perft(c,d-1);c.undo()}return n}

@@ -6,7 +6,7 @@ let failures=0,passes=0;
 function ok(cond,msg){if(cond){passes++;console.log('  ok  '+msg)}else{failures++;console.log('  FAIL '+msg)}}
 (async()=>{
 const browser=await chromium.launch();
-async function fresh(viewport={width:1300,height:950}){const ctx=await browser.newContext({viewport});const page=await ctx.newPage();const errors=[];page.addInitScript(()=>{try{if(!sessionStorage.getItem('thinking-test'))localStorage.setItem('chessmato-thinking-v1','off')}catch(e){}});page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});await page.goto(BASE);await page.waitForFunction(()=>window.chessMatoAppearance);return {ctx,page,errors}}
+async function fresh(viewport={width:1300,height:950}){const ctx=await browser.newContext({viewport});const page=await ctx.newPage();const errors=[];page.addInitScript(()=>{try{if(!sessionStorage.getItem('thinking-test'))localStorage.setItem('chessmato-thinking-v1','off')}catch(e){}try{localStorage.setItem('chessmato-tour-v1','done')}catch(e){}});page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});await page.goto(BASE);await page.waitForFunction(()=>window.chessMatoAppearance);return {ctx,page,errors}}
 let {ctx,page,errors}=await fresh();
 console.log('Load');
 ok(errors.length===0,'no JS errors on load '+JSON.stringify(errors));

@@ -2,7 +2,7 @@
 const {chromium}=require('playwright');
 const BASE=process.env.CHESSMATO_URL||'http://127.0.0.1:8767/';
 let failures=0,passes=0;function ok(c,m){if(c){passes++;console.log('  ok  '+m)}else{failures++;console.log('  FAIL '+m)}}
-(async()=>{const browser=await chromium.launch();const page=await (await browser.newContext({viewport:{width:1300,height:950}})).newPage();const errors=[];page.addInitScript(()=>{try{if(!sessionStorage.getItem('thinking-test'))localStorage.setItem('chessmato-thinking-v1','off')}catch(e){}});page.on('pageerror',e=>errors.push(e.message));
+(async()=>{const browser=await chromium.launch();const page=await (await browser.newContext({viewport:{width:1300,height:950}})).newPage();const errors=[];page.addInitScript(()=>{try{if(!sessionStorage.getItem('thinking-test'))localStorage.setItem('chessmato-thinking-v1','off')}catch(e){}try{localStorage.setItem('chessmato-tour-v1','done')}catch(e){}});page.on('pageerror',e=>errors.push(e.message));
 await page.goto(BASE);await page.waitForFunction(()=>window.chessMatoFeel);
 const center=async s=>{let b=await page.locator(`#board [data-s="${s}"]`).boundingBox();return [b.x+b.width/2,b.y+b.height/2]};
 const dragMove=async(a,b)=>{await page.evaluate(()=>$('board').scrollIntoView({block:'center'}));let [x1,y1]=await center(a),[x2,y2]=await center(b);await page.mouse.move(x1,y1);await page.mouse.down();await page.mouse.move((x1+x2)/2,(y1+y2)/2,{steps:4});

@@ -2,7 +2,7 @@
 const {chromium}=require('playwright');
 const BASE=process.env.CHESSMATO_URL||'http://127.0.0.1:8767/';
 let failures=0,passes=0;function ok(c,m){if(c){passes++;console.log('  ok  '+m)}else{failures++;console.log('  FAIL '+m)}}
-(async()=>{const browser=await chromium.launch();const page=await (await browser.newContext({viewport:{width:1300,height:950}})).newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+(async()=>{const browser=await chromium.launch();const page=await (await browser.newContext({viewport:{width:1300,height:950}})).newPage();await page.addInitScript(()=>{try{localStorage.setItem('chessmato-tour-v1','done')}catch(e){}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
 await page.goto(BASE);await page.waitForFunction(()=>window.chessMatoThinking);
 const click=async s=>page.click(`#board [data-s="${s}"]`);const T=()=>page.evaluate(()=>chessMatoThinking.get());
 ok(await page.evaluate(()=>chessMatoThinking.enabled()),'thinking board on by default');

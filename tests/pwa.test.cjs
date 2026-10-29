@@ -6,7 +6,7 @@ const root=path.join(__dirname,'..'),server=fs.readFileSync(path.join(root,'serv
 const allowed=JSON.parse(server.match(/new Set\((\[[^\]]*\])\)/)[1].replace(/'/g,'"')),files=JSON.parse(sw.match(/const FILES=(\[[^\]]*\])/)[1].replace(/'/g,'"'));
 let missing=allowed.filter(f=>f!=='sw.js'&&!files.includes(f));ok(!missing.length,'every file the launcher serves is cached for offline use'+(missing.length?' — missing '+missing.join(', '):''));
 ok(files.filter(f=>f!=='./').every(f=>allowed.includes(f)),'the offline cache lists only files the launcher serves');
-(async()=>{const browser=await chromium.launch();const ctx=await browser.newContext({viewport:{width:1300,height:950}});const page=await ctx.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+(async()=>{const browser=await chromium.launch();const ctx=await browser.newContext({viewport:{width:1300,height:950}});const page=await ctx.newPage();await page.addInitScript(()=>{try{localStorage.setItem('chessmato-tour-v1','done')}catch(e){}});const errors=[];page.on('pageerror',e=>errors.push(e.message));
 await page.goto(BASE);await page.waitForFunction(()=>window.chessMatoPWA);
 let man=await page.evaluate(async()=>{let m=await (await fetch(document.querySelector('link[rel=manifest]').href)).json();let ok=[];for(let i of m.icons){let r=await fetch(i.src);ok.push(r.ok&&r.headers.get('content-type')==='image/png')}return {name:m.name,display:m.display,icons:m.icons.length,ok:ok.every(Boolean),maskable:m.icons.some(i=>i.purpose==='maskable')}});
 ok(man.name==='CheckMato'&&man.display==='standalone'&&man.icons===3&&man.ok&&man.maskable,'manifest names CheckMato, standalone, with 192/512/maskable PNG icons that load');
@@ -16,7 +16,7 @@ await page.evaluate(()=>chessUITest.navigate('settings','about'));ok(await page.
 await page.waitForFunction(()=>navigator.serviceWorker&&navigator.serviceWorker.controller,null,{timeout:30000}).catch(()=>{});
 if(!await page.evaluate(()=>!!navigator.serviceWorker.controller)){await page.reload();await page.waitForFunction(()=>navigator.serviceWorker.controller,null,{timeout:30000})}
 ok(await page.evaluate(()=>!!navigator.serviceWorker.controller),'offline service worker is active');
-await page.waitForFunction(async()=>{let c=await caches.open('checkmato-app-v2');return !!(await c.match('stockfish.wasm'))&&!!(await c.match('pieces/merida/bQ.svg'))},null,{timeout:30000});
+await page.waitForFunction(async()=>{let c=await caches.open('checkmato-app-v3');return !!(await c.match('stockfish.wasm'))&&!!(await c.match('pieces/merida/bQ.svg'))},null,{timeout:30000});
 console.log('Offline');
 await ctx.setOffline(true);await page.reload();await page.waitForFunction(()=>window.chessMatoGuess&&window.chessMatoGames);
 ok(await page.evaluate(()=>document.querySelectorAll('#board [data-s]').length===64&&!!document.querySelector('#board img, #board .piece')),'with the network off, the app loads from the cache with its board');
