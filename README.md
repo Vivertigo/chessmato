@@ -50,7 +50,7 @@ Switch off guides for a recall test. Completed sessions track first-choice reper
 Correct moves receive a plain-English purpose. A departure offers retry or keeping the move on a two-sided analysis board. Completion waits for Okay before selecting another practice line.
 The coach stores your supplied baseline: 14 games, 5 wins, 8 losses, 1 draw; 57.7% opening and 77% endgame reported accuracy; 70 brilliant/excellent moves and 7 middlegame blunders. The 14th game is a confirmed user resignation. The earlier 50% resignation figure remains approximate. Other personal positions are not fabricated from move names.
 The short running profile updates after each opening session and is separately exportable/restorable using the coach-profile backup controls.
-Next planned features, not yet implemented: middlegame blunder-check prompt and exact personal-position puzzles; resignation holdability review and continuation; full phase-based post-game reviews and longitudinal middlegame/resignation metrics.
+Since implemented (2026-10-29): pre-move blunder check, puzzles from your own missed forcing moves in bot games, resignation review and play-on, and measured middlegame/resignation stats. Still planned: full phase-based post-game review, and personal puzzles from your earlier games (needs your PGNs or FENs).
 
 ## Optional guides and puzzle outcomes
 Guide squares in puzzles reveal the source, then the destination once selected; using this help marks the solve assisted.
@@ -70,3 +70,13 @@ Ten main workspaces: Play, Openings, Puzzles, Minigames, Lessons, Progress, Play
 Gary Bendt is the fictional coach persona, with a legendary 3200 character rating and a 400–3200 coaching range. His practical, calm approach is inspired by Carlsen; he is not presented as Magnus himself. The player’s rating remains separate and unchanged.
 Backups are consolidated under Settings → Backups, and scoring/implementation notes live under Settings → About & scoring.
 Use Start ChessMato.cmd (or the original launcher) for local bot games. Storage keys are preserved so the rebrand does not reset progress.
+
+## Added 2026-10-29
+- **Coaches tab**: offline chats with Gary Bendt and Claudia Herman. Answers come from local rules (a scan of direct attacks, checks, captures and mate threats), your saved progress, and existing engine results. No internet and no AI service.
+- **Thinking board** (Settings → Accessibility, on by default): your first chosen move tints the board into a private copy. Play out one line for both sides, use Back/Forward to step through it, Reset to return to the real game, and Play to send only your first move. Works in every mode except minigames.
+- **Puzzles**: a bundled pack of engine-checked puzzles (puzzle-pack.js) generated offline with the local Stockfish from engine games. Themes include mates, back rank, forks, pins, skewers, discovered attacks, promotion, endgames and quiet moves. Alternate checkmates are accepted, and "Next" rotates themes. Regenerate with tools/generate-puzzles.cjs and tools/build-pack.cjs.
+- **Minigames**: Find a checking move, Free capture, Spot the pin, Knight route, Material count, and Mixed rounds.
+- **Openings**: Mixed mode, where the opponent varies its replies within your repertoire.
+- **Bot games**: an optional blunder check before each move (warns, never blocks), a checks/captures/threats panel, a resignation review before resigning, and practice play-on from saved resignations.
+- **Player profile**: structured strengths and priorities, Measured progress, and Resignation review.
+- Tests: `CHESSMATO_NO_BROWSER=1 node server.cjs`, then `node tests/<name>.test.cjs` (requires Playwright).

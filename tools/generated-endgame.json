@@ -1,0 +1,1037 @@
+[
+ {
+  "fen": "8/3p3r/8/4P2R/3k1K2/6P1/8/8 b - - 2 3",
+  "line": [
+   "Rxh5"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxh5 takes an undefended rook."
+  ],
+  "rating": 600,
+  "eval": "6.7",
+  "ply": 5
+ },
+ {
+  "fen": "8/8/7r/8/2P5/4K3/8/3k4 b - - 3 3",
+  "line": [
+   "Kc2"
+  ],
+  "themes": [
+   "endgame",
+   "quiet move",
+   "tactics"
+  ],
+  "why": [
+   "Kc2 is a quiet move that creates a threat the opponent cannot fully meet."
+  ],
+  "rating": 1400,
+  "eval": "54.9",
+  "ply": 4
+ },
+ {
+  "fen": "8/6k1/4K3/8/7R/7r/2N5/8 w - - 92 47",
+  "line": [
+   "Rxh3",
+   "Kg6",
+   "Rg3+",
+   "Kh5",
+   "Kf5",
+   "Kh6",
+   "Na1"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxh3 takes an undefended rook."
+  ],
+  "rating": 1500,
+  "eval": "mate 10",
+  "ply": 92
+ },
+ {
+  "fen": "8/3K4/R7/r7/8/k7/4p3/8 w - - 2 2",
+  "line": [
+   "Rxa5+",
+   "Kb4",
+   "Re5",
+   "e1=R",
+   "Rxe1"
+  ],
+  "themes": [
+   "endgame",
+   "promotion",
+   "hanging pieces",
+   "capture",
+   "check",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "The passed pawn promotes.",
+   "Rxa5+ takes an undefended rook."
+  ],
+  "rating": 1200,
+  "eval": "55.0",
+  "ply": 2
+ },
+ {
+  "fen": "8/8/2n4P/5K2/4P3/2p2B2/8/4k3 b - - 2 2",
+  "line": [
+   "Ne7+",
+   "Ke6",
+   "c2",
+   "h7",
+   "Ng6"
+  ],
+  "themes": [
+   "endgame",
+   "check",
+   "quiet move",
+   "tactics"
+  ],
+  "why": [
+   "Ne7+ is a quiet move that creates a threat the opponent cannot fully meet."
+  ],
+  "rating": 2000,
+  "eval": "7.4",
+  "ply": 2
+ },
+ {
+  "fen": "4K3/3q4/8/7p/3P2k1/4Q3/8/8 w - - 8 9",
+  "line": [
+   "Kxd7"
+  ],
+  "themes": [
+   "hanging pieces",
+   "capture",
+   "tactics"
+  ],
+  "why": [
+   "Kxd7 takes an undefended queen."
+  ],
+  "rating": 600,
+  "eval": "61.8",
+  "ply": 15
+ },
+ {
+  "fen": "8/5r2/8/1k6/8/5RK1/8/8 w - - 1 11",
+  "line": [
+   "Rxf7"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxf7 takes an undefended rook."
+  ],
+  "rating": 600,
+  "eval": "54.9",
+  "ply": 19
+ },
+ {
+  "fen": "8/8/8/8/3k4/4p3/8/3K4 b - - 15 12",
+  "line": [
+   "Kd3",
+   "Ke1",
+   "e2",
+   "Kf2",
+   "Kd2",
+   "Kg3",
+   "e1=Q+"
+  ],
+  "themes": [
+   "endgame",
+   "promotion",
+   "tactics"
+  ],
+  "why": [
+   "The passed pawn promotes."
+  ],
+  "rating": 1700,
+  "eval": "mate 13",
+  "ply": 22
+ },
+ {
+  "fen": "8/8/6k1/2Q1q1P1/8/7K/8/8 w - - 17 16",
+  "line": [
+   "Qxe5",
+   "Kh5",
+   "Qf4",
+   "Kg6",
+   "Qf6+",
+   "Kh7",
+   "g6+",
+   "Kh6",
+   "g7+",
+   "Kh7",
+   "Qe7",
+   "Kh6",
+   "g8=Q",
+   "Kh5",
+   "Qh4#"
+  ],
+  "themes": [
+   "mate",
+   "mate in 8",
+   "promotion",
+   "hanging pieces",
+   "capture",
+   "queen",
+   "tactics"
+  ],
+  "why": [
+   "The line forces checkmate in 8.",
+   "The passed pawn promotes.",
+   "Qxe5 takes an undefended queen."
+  ],
+  "rating": 2400,
+  "eval": "mate 8",
+  "ply": 30
+ },
+ {
+  "fen": "8/1K6/r7/8/8/4k3/6R1/8 w - - 5 27",
+  "line": [
+   "Kxa6"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "tactics"
+  ],
+  "why": [
+   "Kxa6 takes an undefended rook."
+  ],
+  "rating": 600,
+  "eval": "54.9",
+  "ply": 52
+ },
+ {
+  "fen": "8/1p3R1p/4r3/5K2/8/8/1P6/k7 w - - 2 2",
+  "line": [
+   "Kxe6",
+   "b5",
+   "Kd5"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "tactics"
+  ],
+  "why": [
+   "Kxe6 takes an undefended rook."
+  ],
+  "rating": 900,
+  "eval": "54.8",
+  "ply": 2
+ },
+ {
+  "fen": "8/P7/8/r1Q4K/8/6k1/8/8 b - - 2 4",
+  "line": [
+   "Rxc5+"
+  ],
+  "themes": [
+   "hanging pieces",
+   "capture",
+   "check",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxc5+ takes an undefended queen."
+  ],
+  "rating": 600,
+  "eval": "54.9",
+  "ply": 7
+ },
+ {
+  "fen": "8/P7/7K/2r5/8/7k/8/8 w - - 2 6",
+  "line": [
+   "a8=Q",
+   "Rc3",
+   "Qh1+"
+  ],
+  "themes": [
+   "endgame",
+   "promotion",
+   "pawn",
+   "tactics"
+  ],
+  "why": [
+   "The passed pawn promotes."
+  ],
+  "rating": 1100,
+  "eval": "7.3",
+  "ply": 10
+ },
+ {
+  "fen": "8/8/7K/2r5/8/7k/2Q5/8 b - - 4 8",
+  "line": [
+   "Rxc2"
+  ],
+  "themes": [
+   "hanging pieces",
+   "capture",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxc2 takes an undefended queen."
+  ],
+  "rating": 600,
+  "eval": "mate 14",
+  "ply": 15
+ },
+ {
+  "fen": "8/8/8/2K5/4k3/8/4r3/4R3 w - - 41 30",
+  "line": [
+   "Rxe2+"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "check",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxe2+ takes an undefended rook."
+  ],
+  "rating": 600,
+  "eval": "55.0",
+  "ply": 57
+ },
+ {
+  "fen": "6R1/8/8/2K5/6r1/8/4k3/8 w - - 15 44",
+  "line": [
+   "Rxg4"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxg4 takes an undefended rook."
+  ],
+  "rating": 600,
+  "eval": "55.0",
+  "ply": 86
+ },
+ {
+  "fen": "8/8/8/2r5/8/1R4k1/1Kb5/8 b - - 29 15",
+  "line": [
+   "Bxb3"
+  ],
+  "themes": [
+   "endgame",
+   "capture",
+   "bishop",
+   "tactics"
+  ],
+  "why": [
+   "Bxb3 wins the rook: the recapture or follow-up costs the opponent more than they get back."
+  ],
+  "rating": 800,
+  "eval": "55.0",
+  "ply": 29
+ },
+ {
+  "fen": "1K6/8/2r2Rn1/8/8/3k4/8/8 b - - 1 1",
+  "line": [
+   "Rxf6",
+   "Kc8",
+   "Kc4",
+   "Kd8",
+   "Kd5",
+   "Kc7",
+   "Nf8",
+   "Kb7",
+   "Rc6",
+   "Kb8",
+   "Nd7+",
+   "Kb7",
+   "Nc5+",
+   "Kb8",
+   "Kd6"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxf6 takes an undefended rook."
+  ],
+  "rating": 2400,
+  "eval": "mate 11",
+  "ply": 1
+ },
+ {
+  "fen": "8/6K1/7q/8/8/8/2kp2Q1/8 w - - 20 32",
+  "line": [
+   "Kxh6"
+  ],
+  "themes": [
+   "hanging pieces",
+   "capture",
+   "tactics"
+  ],
+  "why": [
+   "Kxh6 takes an undefended queen."
+  ],
+  "rating": 600,
+  "eval": "12.2",
+  "ply": 62
+ },
+ {
+  "fen": "2q5/8/8/2Q1K3/8/8/1k6/8 w - - 6 39",
+  "line": [
+   "Qxc8",
+   "Kb3",
+   "Kd4"
+  ],
+  "themes": [
+   "hanging pieces",
+   "capture",
+   "queen",
+   "tactics"
+  ],
+  "why": [
+   "Qxc8 takes an undefended queen."
+  ],
+  "rating": 900,
+  "eval": "mate 8",
+  "ply": 76
+ },
+ {
+  "fen": "8/8/2k5/8/rR6/2K5/8/8 w - - 25 32",
+  "line": [
+   "Rxa4"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxa4 takes an undefended rook."
+  ],
+  "rating": 600,
+  "eval": "54.9",
+  "ply": 62
+ },
+ {
+  "fen": "8/6K1/8/8/3P4/1Bkp4/8/8 b - - 1 1",
+  "line": [
+   "Kxb3",
+   "d5",
+   "d2",
+   "Kf7",
+   "d1=Q"
+  ],
+  "themes": [
+   "endgame",
+   "promotion",
+   "hanging pieces",
+   "capture",
+   "tactics"
+  ],
+  "why": [
+   "The passed pawn promotes.",
+   "Kxb3 takes an undefended bishop."
+  ],
+  "rating": 1200,
+  "eval": "61.0",
+  "ply": 1
+ },
+ {
+  "fen": "8/6P1/2k5/1r6/6K1/8/8/8 w - - 1 8",
+  "line": [
+   "g8=Q"
+  ],
+  "themes": [
+   "endgame",
+   "promotion",
+   "pawn",
+   "tactics"
+  ],
+  "why": [
+   "The passed pawn promotes."
+  ],
+  "rating": 800,
+  "eval": "7.0",
+  "ply": 13
+ },
+ {
+  "fen": "8/6P1/2k1K3/8/6r1/8/8/8 b - - 6 10",
+  "line": [
+   "Rxg7"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxg7 takes an undefended pawn."
+  ],
+  "rating": 600,
+  "eval": "54.9",
+  "ply": 18
+ },
+ {
+  "fen": "8/3k4/8/8/8/2K5/1R5r/8 w - - 0 8",
+  "line": [
+   "Rxh2"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxh2 takes an undefended rook."
+  ],
+  "rating": 600,
+  "eval": "55.0",
+  "ply": 13
+ },
+ {
+  "fen": "8/8/1k6/4K3/8/8/3R4/3r4 b - - 17 16",
+  "line": [
+   "Rxd2"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxd2 takes an undefended rook."
+  ],
+  "rating": 600,
+  "eval": "54.9",
+  "ply": 30
+ },
+ {
+  "fen": "4Q3/8/8/4r3/8/8/1k1K3P/8 b - - 8 8",
+  "line": [
+   "Rxe8"
+  ],
+  "themes": [
+   "hanging pieces",
+   "capture",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxe8 takes an undefended queen."
+  ],
+  "rating": 600,
+  "eval": "54.9",
+  "ply": 15
+ },
+ {
+  "fen": "8/8/8/Q7/8/2q3k1/8/1K6 b - - 14 14",
+  "line": [
+   "Qxa5",
+   "Kb2",
+   "Qb4+"
+  ],
+  "themes": [
+   "hanging pieces",
+   "capture",
+   "queen",
+   "tactics"
+  ],
+  "why": [
+   "Qxa5 takes an undefended queen."
+  ],
+  "rating": 900,
+  "eval": "mate 7",
+  "ply": 27
+ },
+ {
+  "fen": "8/8/8/8/8/3R4/3k1K2/r7 b - - 48 48",
+  "line": [
+   "Kxd3",
+   "Kg3",
+   "Ke4",
+   "Kf2",
+   "Ra4"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "tactics"
+  ],
+  "why": [
+   "Kxd3 takes an undefended rook."
+  ],
+  "rating": 1200,
+  "eval": "mate 17",
+  "ply": 94
+ },
+ {
+  "fen": "8/8/8/k7/8/8/KP6/8 w - - 3 14",
+  "line": [
+   "Ka3",
+   "Kb5",
+   "Kb3"
+  ],
+  "themes": [
+   "endgame",
+   "quiet move",
+   "tactics"
+  ],
+  "why": [
+   "Ka3 is a quiet move that creates a threat the opponent cannot fully meet."
+  ],
+  "rating": 1700,
+  "eval": "49.1",
+  "ply": 26
+ },
+ {
+  "fen": "8/1p3b2/3k1PR1/8/8/8/1P6/4K3 b - - 8 5",
+  "line": [
+   "Bxg6"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "bishop",
+   "tactics"
+  ],
+  "why": [
+   "Bxg6 takes an undefended rook."
+  ],
+  "rating": 600,
+  "eval": "2.8",
+  "ply": 9
+ },
+ {
+  "fen": "8/8/5P2/3k4/1p6/1b2K3/1P6/8 w - - 2 12",
+  "line": [
+   "f7"
+  ],
+  "themes": [
+   "endgame",
+   "pawn",
+   "quiet move",
+   "tactics"
+  ],
+  "why": [
+   "f7 is a quiet move that creates a threat the opponent cannot fully meet."
+  ],
+  "rating": 1400,
+  "eval": "9.3",
+  "ply": 22
+ },
+ {
+  "fen": "2K5/r7/8/8/8/8/5k2/6R1 b - - 4 3",
+  "line": [
+   "Kxg1"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "tactics"
+  ],
+  "why": [
+   "Kxg1 takes an undefended rook."
+  ],
+  "rating": 600,
+  "eval": "55.2",
+  "ply": 5
+ },
+ {
+  "fen": "1Q6/4k3/7p/8/6P1/4K2p/2p5/8 b - - 0 1",
+  "line": [
+   "c1=Q+"
+  ],
+  "themes": [
+   "endgame",
+   "promotion",
+   "check",
+   "pawn",
+   "tactics"
+  ],
+  "why": [
+   "The passed pawn promotes."
+  ],
+  "rating": 800,
+  "eval": "3.0",
+  "ply": 1
+ },
+ {
+  "fen": "5r2/4K3/8/8/5Q2/8/8/2k5 b - - 17 12",
+  "line": [
+   "Rxf4"
+  ],
+  "themes": [
+   "hanging pieces",
+   "capture",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxf4 takes an undefended queen."
+  ],
+  "rating": 600,
+  "eval": "54.9",
+  "ply": 22
+ },
+ {
+  "fen": "8/8/4K3/8/4k3/8/8/1R1b4 w - - 13 18",
+  "line": [
+   "Rxd1"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxd1 takes an undefended bishop."
+  ],
+  "rating": 600,
+  "eval": "55.0",
+  "ply": 33
+ },
+ {
+  "fen": "8/8/7k/4K2b/8/8/6R1/8 w - - 31 27",
+  "line": [
+   "Kf6",
+   "Bd1",
+   "Rh2+",
+   "Bh5",
+   "Rh1",
+   "Kh7",
+   "Rxh5+",
+   "Kg8",
+   "Rh6",
+   "Kf8",
+   "Rh8#"
+  ],
+  "themes": [
+   "endgame",
+   "mate",
+   "mate in 6",
+   "back rank",
+   "tactics"
+  ],
+  "why": [
+   "The line forces checkmate in 6. The king is trapped on its back rank."
+  ],
+  "rating": 2050,
+  "eval": "mate 6",
+  "ply": 51
+ },
+ {
+  "fen": "r3R1K1/8/8/8/5k2/6b1/8/8 b - - 55 28",
+  "line": [
+   "Rxe8+",
+   "Kf7",
+   "Re4"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "check",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxe8+ takes an undefended rook."
+  ],
+  "rating": 900,
+  "eval": "mate 8",
+  "ply": 55
+ },
+ {
+  "fen": "8/8/5K2/3P4/k7/8/8/n7 w - - 0 4",
+  "line": [
+   "d6",
+   "Nc2",
+   "d7"
+  ],
+  "themes": [
+   "endgame",
+   "pawn",
+   "quiet move",
+   "tactics"
+  ],
+  "why": [
+   "d6 is a quiet move that creates a threat the opponent cannot fully meet."
+  ],
+  "rating": 1700,
+  "eval": "9.2",
+  "ply": 5
+ },
+ {
+  "fen": "8/8/2K5/4R3/3k4/8/8/r7 b - - 20 19",
+  "line": [
+   "Kxe5"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "tactics"
+  ],
+  "why": [
+   "Kxe5 takes an undefended rook."
+  ],
+  "rating": 600,
+  "eval": "55.1",
+  "ply": 37
+ },
+ {
+  "fen": "8/8/8/R7/4K2k/5r2/8/8 w - - 29 20",
+  "line": [
+   "Kxf3",
+   "Kh3",
+   "Rh5#"
+  ],
+  "themes": [
+   "endgame",
+   "mate",
+   "mate in 2",
+   "hanging pieces",
+   "capture",
+   "tactics"
+  ],
+  "why": [
+   "The line forces checkmate in 2.",
+   "Kxf3 takes an undefended rook."
+  ],
+  "rating": 900,
+  "eval": "mate 2",
+  "ply": 37
+ },
+ {
+  "fen": "8/6k1/8/6P1/1B6/1K6/8/4q3 w - - 0 3",
+  "line": [
+   "Bxe1"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "bishop",
+   "tactics"
+  ],
+  "why": [
+   "Bxe1 takes an undefended queen."
+  ],
+  "rating": 600,
+  "eval": "4.9",
+  "ply": 4
+ },
+ {
+  "fen": "8/8/3K4/8/8/2r4R/5k2/8 w - - 36 20",
+  "line": [
+   "Rxc3"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxc3 takes an undefended rook."
+  ],
+  "rating": 600,
+  "eval": "55.1",
+  "ply": 38
+ },
+ {
+  "fen": "8/8/8/4K3/8/6R1/5k2/2r5 b - - 51 27",
+  "line": [
+   "Kxg3"
+  ],
+  "themes": [
+   "endgame",
+   "hanging pieces",
+   "capture",
+   "tactics"
+  ],
+  "why": [
+   "Kxg3 takes an undefended rook."
+  ],
+  "rating": 600,
+  "eval": "54.9",
+  "ply": 52
+ },
+ {
+  "fen": "8/8/7p/K5k1/8/Q1q5/8/8 w - - 11 19",
+  "line": [
+   "Qxc3"
+  ],
+  "themes": [
+   "hanging pieces",
+   "capture",
+   "queen",
+   "tactics"
+  ],
+  "why": [
+   "Qxc3 takes an undefended queen."
+  ],
+  "rating": 600,
+  "eval": "60.6",
+  "ply": 36
+ },
+ {
+  "fen": "8/8/8/3kb3/K6R/8/8/1r6 b - - 50 26",
+  "line": [
+   "Bd4",
+   "Ka5",
+   "Kc4",
+   "Ka6",
+   "Rb6+"
+  ],
+  "themes": [
+   "endgame",
+   "bishop",
+   "quiet move",
+   "tactics"
+  ],
+  "why": [
+   "Bd4 is a quiet move that creates a threat the opponent cannot fully meet."
+  ],
+  "rating": 2000,
+  "eval": "54.9",
+  "ply": 50
+ },
+ {
+  "fen": "1r6/8/8/3k4/K2R4/8/8/8 b - - 0 29",
+  "line": [
+   "Kxd4",
+   "Ka5",
+   "Rb1",
+   "Ka4",
+   "Kc5",
+   "Ka3",
+   "Rb4",
+   "Ka2",
+   "Kd4",
+   "Ka3",
+   "Kc3",
+   "Ka2",
+   "Ra4+",
+   "Kb1",
+   "Ra3",
+   "Kc1",
+   "Ra1#"
+  ],
+  "themes": [
+   "endgame",
+   "mate",
+   "mate in 9",
+   "back rank",
+   "hanging pieces",
+   "capture",
+   "tactics"
+  ],
+  "why": [
+   "The line forces checkmate in 9. The king is trapped on its back rank.",
+   "Kxd4 takes an undefended rook."
+  ],
+  "rating": 2400,
+  "eval": "mate 9",
+  "ply": 56
+ },
+ {
+  "fen": "1K6/3P4/8/8/3k4/8/r7/8 w - - 2 10",
+  "line": [
+   "d8=Q+"
+  ],
+  "themes": [
+   "endgame",
+   "promotion",
+   "check",
+   "pawn",
+   "tactics"
+  ],
+  "why": [
+   "The passed pawn promotes."
+  ],
+  "rating": 800,
+  "eval": "7.0",
+  "ply": 17
+ },
+ {
+  "fen": "8/8/2K5/8/8/1k6/8/1r1Q4 b - - 10 15",
+  "line": [
+   "Rxd1"
+  ],
+  "themes": [
+   "hanging pieces",
+   "capture",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "Rxd1 takes an undefended queen."
+  ],
+  "rating": 600,
+  "eval": "55.0",
+  "ply": 28
+ },
+ {
+  "fen": "8/4P3/4N3/4K2b/8/5k2/8/8 w - - 4 18",
+  "line": [
+   "Ng7"
+  ],
+  "themes": [
+   "endgame",
+   "quiet move",
+   "tactics"
+  ],
+  "why": [
+   "Ng7 is a quiet move that creates a threat the opponent cannot fully meet."
+  ],
+  "rating": 1400,
+  "eval": "60.7",
+  "ply": 33
+ }
+]

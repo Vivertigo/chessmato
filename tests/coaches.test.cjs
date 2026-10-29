@@ -4,7 +4,7 @@ const BASE=process.env.CHESSMATO_URL||'http://127.0.0.1:8767/';
 let failures=0,passes=0;function ok(c,m){if(c){passes++;console.log('  ok  '+m)}else{failures++;console.log('  FAIL '+m)}}
 (async()=>{const browser=await chromium.launch();const ctx=await browser.newContext({viewport:{width:1300,height:950}});const page=await ctx.newPage();const errors=[],external=[];
 const origin=BASE.startsWith('file:')?'file:':new URL(BASE).origin;
-page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{let u=r.url();if(!u.startsWith(origin)&&!u.startsWith('data:')&&!u.startsWith('blob:'))external.push(u)});
+page.addInitScript(()=>{try{if(!sessionStorage.getItem('thinking-test'))localStorage.setItem('chessmato-thinking-v1','off')}catch(e){}});page.on('pageerror',e=>errors.push(e.message));page.on('request',r=>{let u=r.url();if(!u.startsWith(origin)&&!u.startsWith('data:')&&!u.startsWith('blob:'))external.push(u)});
 await page.goto(BASE);await page.waitForFunction(()=>window.chessMatoCoaches);
 await page.evaluate(()=>localStorage.removeItem('chessmato-coach-chats-v1'));await page.reload();await page.waitForFunction(()=>window.chessMatoCoaches);
 const lastMsg=id=>page.evaluate(id=>{let m=Array.from(document.querySelectorAll(`#panel-coach-${id} .chat-msg`));return {n:m.length,who:m[m.length-1].querySelector('b').textContent,text:m[m.length-1].textContent}},id);

@@ -1,0 +1,24 @@
+[
+ {
+  "fen": "6k1/p4pp1/2P1p2p/1N6/1P3Q2/P2r2P1/2r4P/7K b - - 2 40",
+  "line": [
+   "Rd1+",
+   "Qf1",
+   "Rxf1#"
+  ],
+  "themes": [
+   "mate",
+   "mate in 2",
+   "back rank",
+   "check",
+   "rook",
+   "tactics"
+  ],
+  "why": [
+   "The line forces checkmate in 2. The king is trapped on its back rank."
+  ],
+  "rating": 850,
+  "eval": "mate 2",
+  "ply": 79
+ }
+]
