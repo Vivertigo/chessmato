@@ -17,7 +17,7 @@ document.querySelector('title').textContent='ChessMato · Gary Bendt';top.queryS
 {id:'lessons',title:'Lessons',group:'Learn',subtitle:'Short explanations. One question. A useful idea to practice.',board:false,sections:[['learn','Lesson & quiz'],['topics','Topic library']]},
 {id:'progress',title:'Progress',group:'Reflect',subtitle:'Your training points, daily practice, and earned milestones.',board:false,sections:[['rating','Rating & goals'],['badges','Achievements'],['practice','Puzzle progress']]},
 {id:'profile',title:'Player profile',group:'Reflect',subtitle:'Your strengths, priorities, and opening practice history.',board:false,sections:[['snapshot','My profile'],['sessions','Opening sessions']]},
-{id:'coach',title:'Coach Gary',group:'Learn',subtitle:'Practical, Carlsen-inspired coaching—explained at your training level.',board:false,sections:[['advice','Recommendations'],['import','Import drills'],['notebook','Mistake notebook']]},
+{id:'coach',title:'Coaches',group:'Learn',subtitle:'Chat with Gary Bendt or Claudia Herman about the board and your training. Works offline.',board:true,sections:[['gary','Gary Bendt'],['claudia','Claudia Herman'],['advice','Recommendations'],['import','Import drills'],['notebook','Mistake notebook']]},
 {id:'positions',title:'Analysis',group:'Tools',subtitle:'Load a position or explore the board with both sides under your control.',board:true,sections:[['position','Load a position'],['manual','Manual board']]},
 {id:'settings',title:'Settings',group:'Tools',subtitle:'Board preferences, backups, and how this trainer works.',board:false,sections:[['board','Appearance'],['accessibility','Accessibility'],['backups','Backups'],['about','About & scoring']]}
 ];

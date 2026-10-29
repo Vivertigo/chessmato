@@ -81,6 +81,7 @@ $('academyexport').onclick=()=>{let a=document.createElement('a'),u=URL.createOb
 $('academyrestore').onclick=()=>$('academyfile').click();$('academyfile').onchange=async()=>{try{let d=JSON.parse(await $('academyfile').files[0].text());if(!Number.isFinite(d.rating)||d.rating<400||d.rating>3200||!['days','quizzes','mistakes','kudos'].every(k=>Array.isArray(d[k]))||!d.daily||typeof d.daily!=='object'||!['moves','rounds','clean'].every(k=>Number.isFinite(d[k])&&d[k]>=0))throw Error('Invalid arena backup');profile=d;persist();drawProfile();note('Arena progress restored.')}catch(e){note(e.message)}$('academyfile').value=''};
 drawProfile();lesson();render();
 window.academyCoach={
+botSide(){return bot?bot.human:null},
 recordPuzzleLoss(id,text){profile.mistakes.push({id,text});profile.mistakes=profile.mistakes.slice(-60);return award(-3,'puzzle missed')},
 botHintFen(){return bot&&!busy&&game.turn()===bot.human&&bot.suggestionFen===game.fen()?bot.suggestionFen:null},
 requestHint(){if(!bot||busy||game.turn()!==bot.human||bot.suggestionFen!==game.fen()||!bot.suggestion)return null;let g=new Chess(game.fen()),s=bot.suggestion,m=g.move({from:s.slice(0,2),to:s.slice(2,4),promotion:s[4]||'q'});if(!m)return null;bot.assistedNext=true;return m}

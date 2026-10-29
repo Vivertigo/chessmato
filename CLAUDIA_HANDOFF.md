@@ -127,3 +127,15 @@ Do not claim expanded variety is already implemented.
 3. Continue the requested personalized roadmap one concrete feature at a time.
 4. Flesh out Profile, then flair Progress later without losing the direction the owner likes.
 5. Report actual saved/tested results, not plans as completed work.
+
+## Update 2026-10-29 (Claude session) — verified vs planned
+### Done and tested (Playwright/Chromium, tests/*.test.cjs, via server.cjs and file://)
+- Appearance layer verified: SVG sets (cburnett/merida), letters, legacy glyphs; notation on/off + center/corner/edge; all six presets (rating unchanged, individual overrides kept); keyboard play both orientations (arrows, Home/End, Enter/Space, Escape, roving tabindex); per-square label contrast on default, high-contrast, guide, selected, check, letter-piece states; Gary minimize persists; tomato/ivory theme; no horizontal overflow at 390px on all 10 views.
+- Fixed: base `button:hover` repainted hovered squares dark (unreadable labels, board color changed). Fixed: center labels hidden behind SVG pieces and under move dots. Fixed: server.cjs crashed on non-Windows (explorer.exe spawn); now uses the platform opener, `CHESSMATO_NO_BROWSER=1` skips it.
+- New coaches.js: offline chats for Gary Bendt and Claudia Herman (Coaches tab, board stays visible). Local intent matching + rule-based position scan (your undefended/attacked pieces, their checks/captures/mate threats, your checks/free captures/mates, material). No network, no AI service. History in localStorage `chessmato-coach-chats-v1`. Claudia's voice is a labelled placeholder pending the owner's confirmation of the Sara Herman (ZefCatt) trait list.
+- New storage key: chessmato-coach-chats-v1. academyCoach gained botSide().
+
+### Planned, NOT implemented
+- PGN import/export that builds a player's profile with the local engine.
+- Multiple local profiles; device-to-device sharing preferably over Bluetooth, file export as fallback. No server/account/cloud.
+- Possible future full website: keep ChessMato a plain static site (no backend, in-browser engine, local storage, PWA/offline) so hosting stays a drop-in. Not built.
