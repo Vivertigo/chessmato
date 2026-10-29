@@ -1,3 +1,5 @@
+<img src="icons/icon-192.png" alt="CheckMato logo" width="96">
+
 # CheckMato
 
 Offline, untimed chess training in the browser. Originally built on the "Chess Workshop — Training Arena" base.
@@ -90,4 +92,5 @@ Use Start CheckMato.cmd (or the original launcher) for local bot games. Storage 
 - **Spaced review and daily plan**: missed puzzles return after five minutes, then after 1, 2, 4… days. Opening lines return after 1, 3, 7, 16 and 30 days, and sooner after a slip. Puzzles → Practice queue shows what is due. Coaches → Daily plan has Gary or Claudia pick three short tasks each day: missed puzzles or a due line, your weakest puzzle theme, and an endgame or minigame round.
 - **Guess the move** (Play tab): follow a finished game from one side and guess each move. An exact match scores 3. With the local engine, close alternatives score 1–2. It includes five classic games (Morphy's Opera Game, the Immortal and Evergreen games, Réti–Tartakower 1910, Ed. Lasker–Thomas 1912), each checked to end in its recorded mate, plus any game under My games.
 - **Opening names** appear under the board in analysis, opening practice and bot games.
-- Tests: `CHESSMATO_NO_BROWSER=1 node server.cjs`, then `node tests/<name>.test.cjs` (requires Playwright). Suites: appearance, core, coaches, variety, roadmap, thinking, pgn, lichess, review, guess.
+- **Install as an app**: start it with the launcher, open it in Chrome or Edge, then use Settings → About → Install CheckMato (or the browser's install button). The installed app opens from the desktop or home screen and works fully offline, engine included, without the launcher running. Progress stays in the browser's local storage on that device.
+- Tests: `CHESSMATO_NO_BROWSER=1 node server.cjs`, then `node tests/<name>.test.cjs` (requires Playwright). Suites: appearance, core, coaches, variety, roadmap, thinking, pgn, lichess, review, guess, pwa.
