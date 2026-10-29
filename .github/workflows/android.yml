@@ -1,0 +1,61 @@
+# Builds the signed Android beta APK and publishes it as a GitHub Release (download link for testers).
+# Needs two repository secrets: CHECKMATO_KEYSTORE_B64 (the release keystore, base64) and CHECKMATO_KEYSTORE_PASSWORD.
+# Run it from the Actions tab ("Run workflow"), or push a tag named beta-<number>.
+name: Android beta
+on:
+  workflow_dispatch:
+  push:
+    tags: ['beta-*']
+permissions:
+  contents: write
+jobs:
+  apk:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Install
+        run: npm ci
+      - name: Copy the web app into the Android project
+        run: node tools/build-www.cjs && npx cap sync android
+      - name: Signing key
+        env:
+          KEYSTORE_B64: ${{ secrets.CHECKMATO_KEYSTORE_B64 }}
+        run: |
+          if [ -z "$KEYSTORE_B64" ]; then echo "::error::Add the CHECKMATO_KEYSTORE_B64 and CHECKMATO_KEYSTORE_PASSWORD repository secrets first."; exit 1; fi
+          echo "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/checkmato.jks"
+          echo "CHECKMATO_KEYSTORE=$RUNNER_TEMP/checkmato.jks" >> "$GITHUB_ENV"
+      - name: Build the signed APK
+        working-directory: android
+        env:
+          CHECKMATO_KEYSTORE_PASSWORD: ${{ secrets.CHECKMATO_KEYSTORE_PASSWORD }}
+          CHECKMATO_KEY_PASSWORD: ${{ secrets.CHECKMATO_KEYSTORE_PASSWORD }}
+          CHECKMATO_KEY_ALIAS: checkmato
+        run: ./gradlew --no-daemon assembleRelease
+      - name: Check the signature
+        run: |
+          APK=$(ls android/app/build/outputs/apk/release/CheckMato-beta-*.apk)
+          "$ANDROID_HOME"/build-tools/$(ls "$ANDROID_HOME/build-tools" | sort -V | tail -1)/apksigner verify --print-certs "$APK"
+          echo "APK=$APK" >> "$GITHUB_ENV"
+          echo "APK size: $(du -h "$APK" | cut -f1)" >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: CheckMato-apk
+          path: ${{ env.APK }}
+      - name: Publish the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          NAME=$(basename "$APK" .apk)
+          TAG=${GITHUB_REF_NAME}
+          case "$TAG" in beta-*) ;; *) TAG=$(echo "$NAME" | sed 's/^CheckMato-//');; esac
+          VERSION=$(sed -n "s/.*name:'\([^']*\)'.*/\1/p" version.js)
+          NOTES="CheckMato $VERSION for Android. Open this page on the phone, download $NAME.apk, and allow the install when Android asks. Updates install over the old version and keep your progress."
+          if gh release view "$TAG" >/dev/null 2>&1; then gh release upload "$TAG" "$APK" --clobber; else gh release create "$TAG" "$APK" --prerelease --title "CheckMato $VERSION" --notes "$NOTES"; fi

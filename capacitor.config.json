@@ -1,0 +1,10 @@
+{
+  "appId": "app.checkmato",
+  "appName": "CheckMato",
+  "webDir": "www",
+  "android": {
+    "backgroundColor": "#ff6347",
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false
+  }
+}

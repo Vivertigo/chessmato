@@ -111,7 +111,9 @@ async function startScan(){if(!('BarcodeDetector' in window)||!navigator.mediaDe
     scan={stream,timer:setInterval(async()=>{try{let r=await det.detect(v);if(r&&r.length){let raw=r[0].rawValue;stopScan();receive(raw)}}catch(e){}},300)}}catch(e){stopScan();say('The camera could not start ('+(e.message||e.name)+'). Share or paste the code instead.',true)}}
 function stopScan(){if(scan){clearInterval(scan.timer);scan.stream.getTracks().forEach(t=>t.stop());scan=null}let b=$('link-scan-box');if(b)b.hidden=true}
 // ---- UI: Play → Two phones ----
-const panel=$('panel-play-phones');
+// Beta builds keep games against people live only (version.js features.moveCodes); the section is then hidden.
+const ON=chessMatoFeature('moveCodes');
+const panel=ON?$('panel-play-phones'):null;if(!ON){let p=$('panel-play-phones');if(p)p.remove()}
 function say(text,err){let m=$('link-msg');if(m){m.textContent=text;m.classList.toggle('error',!!err)}if(!err)note(text)}
 function draw(){if(!panel)return;let L=cur();$('link-live').hidden=!L;$('link-games').replaceChildren();
   let list=Object.values(S.games).sort((a,b)=>b.updated-a.updated);for(let g of list.slice(0,8)){let p=document.createElement('p'),b=document.createElement('button');b.textContent=(g.id===S.cur&&onBoard?'On the board: ':'Open: ')+nameOf(g,'w')+' vs '+nameOf(g,'b');b.onclick=()=>{S.cur=g.id;persist();load(g);say(status(g))};
@@ -120,7 +122,7 @@ function draw(){if(!panel)return;let L=cur();$('link-live').hidden=!L;$('link-ga
   $('link-code').value=code;$('link-qr').innerHTML=qrSvg(txt);
   let opp=other(L.me);$('link-accept').hidden=!(L.offer===opp&&!L.over);$('link-offer').hidden=L.over||L.offer===L.me;$('link-resign').hidden=L.over;
   let cl=!L.over&&claimable(L.sans);$('link-claim').hidden=!cl;if(cl)$('link-claim').textContent='Claim draw ('+cl+')';
-  $('link-revelation').hidden=!(L.over&&L.result==='1/2-1/2'&&!L.rev);$('link-share').hidden=!navigator.share;
+  $('link-revelation').hidden=!(L.over&&L.result==='1/2-1/2'&&!L.rev);$('link-share').hidden=!chessMatoCanShare();
   $('link-send-title').textContent=L.rev&&L.rev.host?'Send the Revelation result':'Send to '+nameOf(L,opp)}
 if(panel){panel.innerHTML='<h2>Two phones</h2><p class="muted">Play a friend on another phone or computer with no internet. Each move travels as a short code: scan its QR code, share it (Bluetooth, Nearby Share, messages), save it as a file, or paste it. Clock-free, with the same rules as Two players.</p>'+
  '<details id="link-new"'+(Object.keys(S.games).length?'':' open')+'><summary>Start a new game</summary><div class="row"><label>Your name <input id="link-name" maxlength="30"></label><label>Opponent <input id="link-opp" maxlength="30"></label></div><div class="row"><select id="link-side" aria-label="Your colour"><option value="w">I play White</option><option value="b">I play Black</option><option value="lot">Colours by lot</option></select><button class="primary" id="link-start">Start and show the first code</button></div></details>'+
@@ -135,8 +137,8 @@ if(panel){panel.innerHTML='<h2>Two phones</h2><p class="muted">Play a friend on 
  $('link-open').onclick=()=>$('link-file').click();$('link-file').onchange=async()=>{let f=$('link-file').files[0];if(f)receive(await f.text());$('link-file').value=''};
  $('link-scan').onclick=startScan;$('link-scan-stop').onclick=stopScan;
  $('link-copy').onclick=async()=>{let t=$('link-code').value;try{await navigator.clipboard.writeText(t);say('Code copied.')}catch(e){$('link-code').select();say('Select the code and copy it.')}};
- $('link-share').onclick=async()=>{let L=cur();if(!L)return;try{await navigator.share({title:'CheckMato move',text:shareText(outgoing(L))})}catch(e){}};
- $('link-save').onclick=()=>{let L=cur();if(!L)return;let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([shareText(outgoing(L))+'\n'],{type:'text/plain'}));a.download='checkmato-move-'+L.id+'-'+L.sans.length+'.txt';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+ $('link-share').onclick=async()=>{let L=cur();if(!L)return;await chessMatoShare({title:'CheckMato move',text:shareText(outgoing(L))})};
+ $('link-save').onclick=()=>{let L=cur();if(!L)return;chessMatoSave('checkmato-move-'+L.id+'-'+L.sans.length+'.txt',shareText(outgoing(L))+'\n','text/plain')};
  $('link-offer').onclick=()=>{let L=cur();if(!L||L.over)return;L.offer=L.me;L.updated=Date.now();persist();draw();say('Draw offered. Send this code to '+nameOf(L,other(L.me))+'.')};
  $('link-accept').onclick=()=>{let L=cur();if(!L||L.over||L.offer!==other(L.me))return;L.endEv='a';finish(L,'1/2-1/2','draw agreed');persist();draw();say(status(L)+' Send this code to '+nameOf(L,other(L.me))+'.')};
  $('link-claim').onclick=()=>{let L=cur();let cl=L&&!L.over&&claimable(L.sans);if(!cl)return;L.endEv='c';finish(L,'1/2-1/2',cl+' (claimed by '+L.names[L.me]+')');persist();draw();say(status(L)+' Send this code to '+nameOf(L,other(L.me))+'.')};
@@ -144,7 +146,7 @@ if(panel){panel.innerHTML='<h2>Two phones</h2><p class="muted">Play a friend on 
  $('link-revelation').onclick=playRevelation;draw()}
 // A QR code opened by the phone's own camera lands here as #cm=<code> (on a fresh start or in an open tab).
 function fromHash(){if(!/^#cm=/.test(location.hash))return;let h=location.hash;try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}setTimeout(()=>receive(h),0)}
-fromHash();addEventListener('hashchange',fromHash);
+if(ON){fromHash();addEventListener('hashchange',fromHash)}
 const style=document.createElement('style');style.textContent='#link-qr svg{width:min(260px,70vw);height:auto;display:block;margin:6px 0;border-radius:6px}#link-code,#link-in{width:100%;font:13px ui-monospace,monospace;word-break:break-all}#link-msg.error{color:#ffb4a8}#link-video{width:min(320px,90vw);border-radius:8px;display:block;margin:6px 0}#panel-play-phones .row label{display:flex;gap:6px;align-items:center}#panel-play-phones input:not([type=file]){width:140px}#link-games p{margin:4px 0}';document.head.append(style);
 window.chessMatoLink={create,receive,code:()=>{let L=cur();return L?outgoing(L):null},get:cur,games:()=>S.games,encMoves,decMoves,parseCode,claimable};
 })();

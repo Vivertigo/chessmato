@@ -1,10 +1,11 @@
 // Two phones, no internet: games played by exchanging move codes between two separate browsers.
+// Beta builds hide this mode (version.js features.moveCodes=false); the tests switch it back on locally.
 const {chromium}=require('playwright');
 const BASE=process.env.CHESSMATO_URL||'http://127.0.0.1:8767/';
 let failures=0,passes=0;function ok(c,m){if(c){passes++;console.log('  ok  '+m)}else{failures++;console.log('  FAIL '+m)}}
 (async()=>{const browser=await chromium.launch();const errors=[];
 async function phone(){const ctx=await browser.newContext({viewport:{width:390,height:844}});const p=await ctx.newPage();p.on('pageerror',e=>errors.push(e.message));p.on('dialog',d=>d.accept());
-  await p.addInitScript(()=>{if(!sessionStorage.getItem('thinking-test'))localStorage.setItem('chessmato-thinking-v1','off');localStorage.setItem('chessmato-tour-v1','done')});await p.goto(BASE);await p.waitForFunction(()=>window.chessMatoLink);return p}
+  await p.addInitScript(()=>{if(!sessionStorage.getItem('thinking-test'))localStorage.setItem('chessmato-thinking-v1','off');localStorage.setItem('chessmato-tour-v1','done');localStorage.setItem('chessmato-features','{"moveCodes":true}')});await p.goto(BASE);await p.waitForFunction(()=>window.chessMatoLink);return p}
 const A=await phone(),B=await phone();
 const move=(p,f,t)=>p.evaluate(([f,t])=>{clickSquare(f);clickSquare(t)},[f,t]);
 const code=p=>p.evaluate(()=>chessMatoLink.code());
@@ -58,8 +59,12 @@ console.log('Phone camera link');
 await A.click('#link-new summary');await A.click('#link-start');let h=await code(A);
 const C=await phone();await C.goto(BASE+'#cm='+encodeURIComponent(h));await C.waitForFunction(()=>window.chessMatoLink&&chessMatoLink.get());
 ok(await C.evaluate(()=>chessMatoLink.get().me==='w'&&location.hash===''),'opening a #cm= link (from the camera app) joins the game and clears the address');
-const ctxD=await browser.newContext();const D=await ctxD.newPage();D.on('pageerror',e=>errors.push(e.message));await D.addInitScript(()=>localStorage.setItem('chessmato-tour-v1','done'));
+const ctxD=await browser.newContext();const D=await ctxD.newPage();D.on('pageerror',e=>errors.push(e.message));await D.addInitScript(()=>{localStorage.setItem('chessmato-tour-v1','done');localStorage.setItem('chessmato-features','{"moveCodes":true}')});
 await D.goto(BASE+'#cm='+encodeURIComponent(h));await D.waitForFunction(()=>window.chessMatoLink&&chessMatoLink.get(),null,{timeout:8000}).catch(()=>{});
 ok(await D.evaluate(()=>!!chessMatoLink.get()&&!$('panel-play-phones').hidden),'a phone opening CheckMato from the link goes straight to the game');
+console.log('Beta build');
+const ctxE=await browser.newContext();const E=await ctxE.newPage();E.on('pageerror',e=>errors.push(e.message));await E.addInitScript(()=>localStorage.setItem('chessmato-tour-v1','done'));
+await E.goto(BASE+'#cm='+encodeURIComponent(h));await E.waitForFunction(()=>window.chessMatoLink);await E.waitForTimeout(300);
+ok(await E.evaluate(()=>!document.querySelector('#section-play-phones')&&!$('panel-play-phones')&&!chessMatoLink.get()&&(chessUITest.navigate('play'),![...document.querySelectorAll('#section-tabs button')].some(b=>/Two phones/.test(b.textContent)))),'in the beta, Two phones is hidden and move links are ignored');
 ok(errors.length===0,'no JS errors '+JSON.stringify(errors));
 await browser.close();console.log(`\n${passes} passed, ${failures} failed`);process.exit(failures?1:0)})().catch(e=>{console.error(e);process.exit(2)});

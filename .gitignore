@@ -2,3 +2,9 @@
 personal-data.js
 *.zip
 node_modules/
+
+# Android build inputs and outputs (rebuilt from the web files)
+www/
+*.jks
+*.keystore
+keystore.properties

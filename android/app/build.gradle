@@ -1,0 +1,82 @@
+apply plugin: 'com.android.application'
+
+// Version comes from the shared version.js so the web app and the APK always agree.
+def versionFile = rootProject.file('../version.js')
+def versionText = versionFile.exists() ? versionFile.text : ''
+def appVersionName = (versionText =~ /name:'([^']+)'/) ? (versionText =~ /name:'([^']+)'/)[0][1] : '0.0.0'
+def appVersionCode = (versionText =~ /code:(\d+)/) ? ((versionText =~ /code:(\d+)/)[0][1] as Integer) : 1
+
+// Release signing: one key for every beta, so updates install over the old app and keep saved progress.
+// Read from android/keystore.properties locally or from environment variables in CI. Never committed.
+def signingProps = new Properties()
+def signingFile = rootProject.file('keystore.properties')
+if (signingFile.exists()) signingFile.withInputStream { signingProps.load(it) }
+def signingValue = { key, env -> signingProps.getProperty(key) ?: System.getenv(env) }
+
+android {
+    namespace = "app.checkmato"
+    compileSdk = rootProject.ext.compileSdkVersion
+    defaultConfig {
+        applicationId "app.checkmato"
+        minSdkVersion rootProject.ext.minSdkVersion
+        targetSdkVersion rootProject.ext.targetSdkVersion
+        versionCode appVersionCode
+        versionName appVersionName
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        aaptOptions {
+             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
+             // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
+            ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
+        }
+    }
+    signingConfigs {
+        release {
+            def store = signingValue('storeFile', 'CHECKMATO_KEYSTORE')
+            if (store) {
+                storeFile file(store)
+                storePassword signingValue('storePassword', 'CHECKMATO_KEYSTORE_PASSWORD')
+                keyAlias signingValue('keyAlias', 'CHECKMATO_KEY_ALIAS')
+                keyPassword signingValue('keyPassword', 'CHECKMATO_KEY_PASSWORD')
+            }
+        }
+    }
+    buildTypes {
+        release {
+            if (signingValue('storeFile', 'CHECKMATO_KEYSTORE')) signingConfig signingConfigs.release
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    applicationVariants.all { variant ->
+        variant.outputs.all { outputFileName = "CheckMato-beta-${appVersionCode}.apk" }
+    }
+}
+
+repositories {
+    flatDir{
+        dirs '../capacitor-cordova-android-plugins/src/main/libs', 'libs'
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"
+    implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"
+    implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"
+    implementation project(':capacitor-android')
+    testImplementation "junit:junit:$junitVersion"
+    androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"
+    androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"
+    implementation project(':capacitor-cordova-android-plugins')
+}
+
+apply from: 'capacitor.build.gradle'
+
+try {
+    def servicesJSON = file('google-services.json')
+    if (servicesJSON.text) {
+        apply plugin: 'com.google.gms.google-services'
+    }
+} catch(Exception e) {
+    logger.info("google-services.json not found, google-services plugin not applied. Push Notifications won't work")
+}

@@ -21,6 +21,8 @@ document.querySelector('title').textContent='CheckMato · Gary Bendt';top.queryS
 {id:'positions',title:'Analysis',group:'Tools',subtitle:'Load a position or explore the board with both sides under your control.',board:true,sections:[['position','Load a position'],['manual','Manual board']]},
 {id:'settings',title:'Settings',group:'Tools',subtitle:'Board preferences, backups, and how this trainer works.',board:false,sections:[['board','Appearance'],['accessibility','Accessibility'],['backups','Backups'],['about','About & scoring']]}
 ];
+// Beta builds keep games against people live only: the move-code section (Two phones) is hidden, its code kept.
+if(window.chessMatoFeature&&!chessMatoFeature('moveCodes'))for(let v of views)v.sections=v.sections.filter(s=>s[0]!=='phones');
 let currentView='puzzles',currentSection='solve',remember={};try{let s=JSON.parse(localStorage.getItem('chess-ui-v1')||'{}');remember=s.sections||{};if(views.some(v=>v.id===s.view))currentView=s.view}catch(e){}
 const panels={};oldAside.replaceChildren();
 function panel(id,section){let node=document.createElement('section');node.className='workspace-panel';node.id='panel-'+id+'-'+section;node.setAttribute('role','tabpanel');node.setAttribute('aria-labelledby','section-'+id+'-'+section);node.hidden=true;oldAside.append(node);panels[id+'/'+section]=node;return node}

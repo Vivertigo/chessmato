@@ -1,0 +1,19 @@
+{
+  "name": "checkmato",
+  "private": true,
+  "description": "Offline, untimed chess training: puzzles, openings, games and coaches.",
+  "scripts": {
+    "www": "node tools/build-www.cjs",
+    "android:sync": "node tools/build-www.cjs && cap sync android",
+    "android:apk": "node tools/build-www.cjs && cap sync android && cd android && ./gradlew assembleRelease"
+  },
+  "devDependencies": {
+    "@capacitor/android": "8.6.0",
+    "@capacitor/cli": "8.6.0",
+    "@capacitor/core": "8.6.0"
+  },
+  "dependencies": {
+    "@capacitor/filesystem": "^8.1.5",
+    "@capacitor/share": "^8.0.3"
+  }
+}

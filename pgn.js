@@ -34,7 +34,7 @@ function importText(text,choice){let chunks=splitGames(text),added=0,dup=0,error
 function toPGN(g){let h={Event:'?',Site:'?',Date:'????.??.??',Round:'?',White:'?',Black:'?',Result:g.result||'*',...g.headers};if(g.start){h.SetUp='1';h.FEN=g.start}
   let out=Object.entries(h).map(([k,v])=>'['+k+' "'+String(v).replace(/"/g,"'")+'"]').join('\n')+'\n\n',c=new Chess(g.start||undefined),n=c.turn()==='w'?1:0,parts=[],mv=Number((g.start||'').split(' ')[5])||1;
   g.sans.forEach((s,i)=>{let white=c.turn()==='w';if(white)parts.push(mv+'. '+s);else parts.push(i===0?mv+'... '+s:s);c.move(s);if(!white)mv++});return out+parts.join(' ').replace(/(.{1,78})(\s|$)/g,'$1\n').trim()+' '+(g.result||'*')+'\n'}
-function download(name,text,type){let a=document.createElement('a'),u=URL.createObjectURL(new Blob([text],{type}));a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}
+function download(name,text,type){return chessMatoSave(name,text,type)}
 // ---- CheckMato bot games are saved automatically ----
 const priorEnd=window.chessMatoOnGameEnd;window.chessMatoOnGameEnd=function(e){if(priorEnd)priorEnd(e);try{let c=new Chess();if(!c.load_pgn(e.pgn))return;let start=e.startFen||null,sans=c.history();if(!sans.length)return;
   let res=e.win?(e.human==='w'?'1-0':'0-1'):e.draw?'1/2-1/2':(e.human==='w'?'0-1':'1-0'),me='You',bot='CheckMato bot ('+window.academyTest.getProfile().rating+' level)';
