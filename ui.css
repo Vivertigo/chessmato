@@ -6,10 +6,11 @@ header{max-width:none;margin:0;padding:18px 28px;border-bottom:1px solid var(--s
 header h1{font-size:21px;letter-spacing:-.5px}header small{font-size:12px}.header-score{font-size:12px;padding:7px 12px;border:1px solid var(--stroke);border-radius:5px;color:var(--accent)}
 #app-shell{display:grid;grid-template-columns:204px minmax(0,1fr);max-width:1600px;margin:0 auto;min-height:calc(100vh - 150px)}
 #primary-tabs{padding:22px 14px;border-right:1px solid var(--stroke);display:flex;flex-direction:column;gap:3px;align-self:start;position:sticky;top:0;max-height:100vh;overflow:auto}
+.rail-tabs{display:contents}
 .nav-group{text-transform:uppercase;letter-spacing:1.4px;font-size:10px;color:#8c9b97;margin:18px 10px 5px}
-#primary-tabs>button{text-align:left;border:0;background:transparent;border-radius:5px;padding:10px 12px;color:#bac6c1;font-size:14px;min-height:41px}
-#primary-tabs>button:hover{background:#25302d;color:white}
-#primary-tabs>button.current-tab{background:#2d4036;color:#dcf3df;font-weight:650;border-left:3px solid #b4d8bf;padding-left:9px}
+#primary-tabs .rail-tabs>button{text-align:left;border:0;background:transparent;border-radius:5px;padding:10px 12px;color:#bac6c1;font-size:14px;min-height:41px}
+#primary-tabs .rail-tabs>button:hover{background:#25302d;color:white}
+#primary-tabs .rail-tabs>button.current-tab{background:#2d4036;color:#dcf3df;font-weight:650;border-left:3px solid #b4d8bf;padding-left:9px}
 .mentor-card{padding:8px 8px 14px;border-bottom:1px solid var(--stroke);margin:0 0 5px;display:grid;grid-template-columns:35px 1fr;gap:9px}
 .mentor-monogram{border:1px solid #6c8975;border-radius:5px;width:35px;height:35px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:bold;color:#d6e6d8}
 .mentor-card strong{font-size:14px;display:block}.mentor-card small{font-size:10px;display:block;color:#a1b2a9}
@@ -80,7 +81,7 @@ dialog h2{font-size:21px}dialog p{font-size:14px;line-height:1.8}
 footer{max-width:1600px;margin:auto;padding:15px 28px;font-size:11px;border-top:1px solid #293532}
 @media(min-width:1450px){.workspace-main{grid-template-columns:minmax(420px,680px) minmax(300px,1fr)}}
 @media(max-width:1150px){#app-shell{grid-template-columns:172px minmax(0,1fr)}#app-workspace{padding:22px 20px}.workspace-main{grid-template-columns:minmax(270px,1.2fr) minmax(240px,1fr);gap:18px}.workspace-panel{padding:15px}.mentor-card{grid-template-columns:29px 1fr}.mentor-monogram{width:29px;height:29px}}
-@media(max-width:900px){#app-shell{display:block}#primary-tabs{position:static;border-right:0;border-bottom:1px solid var(--stroke);padding:9px 14px;display:flex;flex-direction:row;gap:5px;overflow:auto;max-height:none}.mentor-card,.nav-group{display:none}#primary-tabs>button{white-space:nowrap;padding:8px 11px;font-size:12px;min-height:35px}#primary-tabs>button.current-tab{border-left:0;border-bottom:2px solid #b4d8bf;padding-left:11px}.workspace-main{grid-template-columns:minmax(280px,1.3fr) minmax(250px,1fr);gap:18px}.sq{font-size:clamp(25px,5.5vw,54px)}}
+@media(max-width:900px){#app-shell{display:block}#primary-tabs{position:static;border-right:0;border-bottom:1px solid var(--stroke);padding:9px 14px;display:flex;flex-direction:row;gap:5px;overflow:auto;max-height:none}.mentor-card,.nav-group{display:none}#primary-tabs .rail-tabs>button{white-space:nowrap;padding:8px 11px;font-size:12px;min-height:35px}#primary-tabs .rail-tabs>button.current-tab{border-left:0;border-bottom:2px solid #b4d8bf;padding-left:11px}.workspace-main{grid-template-columns:minmax(280px,1.3fr) minmax(250px,1fr);gap:18px}.sq{font-size:clamp(25px,5.5vw,54px)}}
 @media(max-width:680px){header{padding:14px 16px}header h1{font-size:19px}header small{font-size:10px}.header-score{font-size:10px;padding:5px 7px}#app-workspace{padding:18px 13px}#view-heading{padding-bottom:12px;gap:10px}#view-heading h1{font-size:24px}#view-heading p{font-size:12px}.offline-label{display:none}#section-tabs{margin-bottom:16px;gap:4px}#section-tabs button{font-size:12px;padding:6px 9px}.workspace-main{display:flex;flex-direction:column;gap:16px}#board-workspace,#workspace-panels{width:100%}.workspace-main.without-board{display:block}.workspace-panel,.workspace-main.without-board .workspace-panel{padding:18px}.sq{font-size:9vw}.coord{font-size:5vw}.sq:has(.piece) .coord{font-size:3.8vw}#queue{max-height:55vh}.board-context{margin-bottom:10px}footer{padding:14px 16px}}
 /* CheckMato identity: tomato-red surroundings, unchanged chessboard palette. */
 :root{--app-background:#ff6347;--app-ink:#291b16;--app-muted:#512d22;--board-light:#d8dfce;--board-dark:#779182;--piece-font:"Segoe UI Symbol","DejaVu Sans",serif;background:var(--app-background)}
