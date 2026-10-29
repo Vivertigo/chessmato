@@ -152,3 +152,5 @@ Do not claim expanded variety is already implemented.
 - Ranked types (planned): Ranked has guides off and separate ratings per speed (clock-free, bullet, blitz, standard). Assisted-Ranked is clock-free only, with guides on and its own single Elo that never mixes with Ranked.
   - Online clock-free games let the player choose Ranked (unassisted) or Assisted-Ranked. A player who doesn't respond within 72 hours automatically resigns. Local clock-free games have no limit.
   - Local clock-free Bluetooth games are automatically drawn if the devices disconnect (a short reconnect window has been suggested; the user hasn't answered yet).
+  - The host picks the reconnect window (2, 4 or 6 minutes) before sending the invite. If the devices don't reconnect in time, a clock-free game is a draw.
+- Clock-free house rule: no 50-move rule; threefold repetition and all other standard draws stay. Timed modes keep full standard rules. Applied now to local untimed bot games (see clockFreeOver in index.html).

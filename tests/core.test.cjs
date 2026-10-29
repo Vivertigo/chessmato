@@ -16,6 +16,8 @@ c=new C('6k1/5ppp/8/8/8/8/8/4R1K1 w - - 0 1');c.move('Re8#');out.mate=c.in_check
 c=new C('4k3/8/8/8/1b6/8/3N4/R3K2r w - - 0 1');out.double=c.moves().join(',');
 return out});
 ok(r.perft3===8902,'perft(3)=8902');ok(r.castleThroughCheck==='false/true','cannot castle through check');ok(r.ep,'en passant');ok(r.under,'all promotions');ok(r.stalemate,'stalemate detected');ok(r.mate,'checkmate detected');
+ok(await page.evaluate(()=>{let g=new workshopTest.Chess('4k3/8/8/8/8/8/4R3/4K3 w - - 120 90');return g.in_draw()&&!clockFreeOver(g)}),'clock-free: no 50-move rule');
+ok(await page.evaluate(()=>{let g=new workshopTest.Chess();for(let m of ['Nf3','Nf6','Ng1','Ng8','Nf3','Nf6','Ng1','Ng8'])g.move(m);return clockFreeOver(g)}),'clock-free: threefold repetition still draws');
 console.log('Puzzle flow');
 await page.evaluate(()=>chessUITest.navigate('puzzles','solve'));
 let pz=await page.evaluate(()=>({id:current.id,line:current.line}));

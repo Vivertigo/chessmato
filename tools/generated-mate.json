@@ -20,5 +20,31 @@
   "rating": 850,
   "eval": "mate 2",
   "ply": 79
+ },
+ {
+  "fen": "8/5p1k/4p1pp/q3P2N/5QK1/1r3P1P/2bp3P/8 w - - 0 41",
+  "line": [
+   "Qxf7+",
+   "Kh8",
+   "Qg7#"
+  ],
+  "themes": [
+   "mate",
+   "mate in 2",
+   "hanging pieces",
+   "capture",
+   "check",
+   "pin",
+   "queen",
+   "tactics"
+  ],
+  "why": [
+   "The line forces checkmate in 2.",
+   "Qxf7+ takes an undefended pawn.",
+   "Qxf7+ pins the pawn on e6 to the rook on b3."
+  ],
+  "rating": 1250,
+  "eval": "mate 2",
+  "ply": 80
  }
 ]

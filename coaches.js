@@ -33,7 +33,7 @@ const list=(a,n=4)=>a.length<=n?a.join(', '):a.slice(0,n).join(', ')+' and '+(a.
 // ---- Answers (facts), then each coach phrases them ----
 function positionReport(){
   let g=game,me=mySide(g),r=scan(g,me),lv=level(),lines=[];
-  if(g.game_over())return {facts:[g.in_checkmate()?'The game is over: checkmate.':'The game is over: drawn position.'],r};
+  if(clockFreeOver(g))return {facts:[g.in_checkmate()?'The game is over: checkmate.':'The game is over: drawn position.'],r};
   if(r.inCheck)lines.push('You are in check. Every legal move must deal with it: move the king, capture the checker, or block a line check.');
   if(r.myMates.length)lines.push('Checkmate is available: '+list(r.myMates)+'.');
   let hang=boardPieces(g).filter(({s,p})=>p.color===me&&p.type!=='k').map(({s,p})=>({s,p,att:attackers(g,s,r.them),def:attackers(g,s,me)})).filter(x=>x.att.length&&(!x.def.length||cheaperAttacker(x.att,x.p)));
